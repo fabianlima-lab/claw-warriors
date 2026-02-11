@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String    @id @default(uuid()) @db.Uuid
+  email                 String    @unique @db.VarChar(255)
+  passwordHash          String    @map("password_hash") @db.VarChar(255)
+  name                  String?   @db.VarChar(255)
+  tier                  String    @default("free") @db.VarChar(20)
+  channel               String?   @db.VarChar(20)
+  channelId             String?   @map("channel_id") @db.VarChar(255)
+  goals                 String[]
+  stripeCustomerId      String?   @map("stripe_customer_id") @db.VarChar(255)
+  stripeSubscriptionId  String?   @map("stripe_subscription_id") @db.VarChar(255)
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  warriors              Warrior[]
+  energy                Energy?
+  messages              Message[]
+  elixirPurchases       ElixirPurchase[]
+
+  @@map("users")
+}
+
+model Warrior {
+  id              String    @id @default(uuid()) @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  templateId      String    @map("template_id") @db.VarChar(50)
+  customName      String?   @map("custom_name") @db.VarChar(100)
+  class           String    @db.VarChar(20)
+  tone            String    @default("casual") @db.VarChar(20)
+  modelDefault    String    @map("model_default") @db.VarChar(50)
+  modelEscalation String?   @map("model_escalation") @db.VarChar(50)
+  systemPrompt    String    @map("system_prompt")
+  isActive        Boolean   @default(true) @map("is_active")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  template        WarriorTemplate @relation(fields: [templateId], references: [id])
+  messages        Message[]
+
+  @@map("warriors")
+}
+
+model Energy {
+  id                String    @id @default(uuid()) @db.Uuid
+  userId            String    @unique @map("user_id") @db.Uuid
+  monthlyAllocation Int       @default(0) @map("monthly_allocation")
+  usedThisMonth     Int       @default(0) @map("used_this_month")
+  immortalActive    Boolean   @default(false) @map("immortal_active")
+  immortalExpires   DateTime? @map("immortal_expires")
+  resetDate         DateTime  @map("reset_date")
+  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("energy")
+}
+
+model Message {
+  id          String    @id @default(uuid()) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  warriorId   String?   @map("warrior_id") @db.Uuid
+  direction   String    @db.VarChar(10)
+  channel     String    @db.VarChar(20)
+  content     String
+  tokensUsed  Int       @default(0) @map("tokens_used")
+  modelUsed   String?   @map("model_used") @db.VarChar(50)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  warrior     Warrior?  @relation(fields: [warriorId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("messages")
+}
+
+model ElixirPurchase {
+  id              String    @id @default(uuid()) @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  type            String    @db.VarChar(20)
+  energyAdded     Int?      @map("energy_added")
+  pricePaid       Decimal   @map("price_paid") @db.Decimal(10, 2)
+  stripePaymentId String?   @map("stripe_payment_id") @db.VarChar(255)
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("elixir_purchases")
+}
+
+model WarriorTemplate {
+  id                  String    @id @db.VarChar(50)
+  class               String    @db.VarChar(20)
+  name                String    @db.VarChar(100)
+  gender              String    @db.VarChar(10)
+  introQuote          String    @map("intro_quote")
+  firstMessage        String    @map("first_message")
+  baseSystemPrompt    String    @map("base_system_prompt")
+  stats               Json
+  recommendedTier     String    @map("recommended_tier") @db.VarChar(20)
+  recommendedChannel  String    @map("recommended_channel") @db.VarChar(20)
+  modelDefault        String    @map("model_default") @db.VarChar(50)
+  modelEscalation     String?   @map("model_escalation") @db.VarChar(50)
+  artFile             String    @map("art_file") @db.VarChar(255)
+
+  warriors            Warrior[]
+
+  @@map("warrior_templates")
+}
