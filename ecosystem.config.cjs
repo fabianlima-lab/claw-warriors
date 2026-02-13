@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'cw-api',
-      script: './backend/src/server.js',
-      cwd: '/home/deploy/clawwarriors',
+      script: './src/server.js',
+      cwd: '/home/deploy/clawwarriors/backend',
       env: {
         NODE_ENV: 'production',
         PORT: 3001,
