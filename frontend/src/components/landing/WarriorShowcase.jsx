@@ -6,6 +6,7 @@ import ClassTabs from '@/components/ClassTabs';
 import StatBar from '@/components/ui/StatBar';
 import Card from '@/components/ui/Card';
 import { CLASS_LABELS, CLASS_STAT_NAMES, CLASS_STAT_KEYS, CLASS_HEX } from '@/lib/constants';
+import { useTranslations } from 'next-intl';
 
 const FALLBACK_WARRIORS = {
   guardian: [
@@ -38,6 +39,9 @@ const FALLBACK_WARRIORS = {
 export default function WarriorShowcase() {
   const [selectedClass, setSelectedClass] = useState('guardian');
   const [warriors, setWarriors] = useState(FALLBACK_WARRIORS);
+  const t = useTranslations('WarriorShowcase');
+  const tClasses = useTranslations('Classes');
+  const tStats = useTranslations('Stats');
 
   useEffect(() => {
     const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
@@ -60,12 +64,12 @@ export default function WarriorShowcase() {
   return (
     <section id="warriors" className="max-w-6xl mx-auto px-6 py-20">
       <div className="text-center mb-10">
-        <span className="text-xs uppercase tracking-widest text-guardian font-medium">Choose Your Class</span>
+        <span className="text-xs uppercase tracking-widest text-guardian font-medium">{t('label')}</span>
         <h2 className="font-[family-name:var(--font-display)] text-3xl md:text-4xl text-txt mt-3">
-          15 Warriors. 5 Classes.
+          {t('title')}
         </h2>
         <p className="text-txt-muted mt-3 max-w-xl mx-auto">
-          Each warrior has a unique personality, skill set, and communication style tailored to your goals.
+          {t('subtitle')}
         </p>
       </div>
 
@@ -89,7 +93,7 @@ export default function WarriorShowcase() {
                 />
                 <h3 className="font-[family-name:var(--font-display)] text-txt text-xl">{w.name}</h3>
                 <span className="text-xs uppercase tracking-wider font-medium" style={{ color }}>
-                  {CLASS_LABELS[cls]}
+                  {tClasses(CLASS_LABELS[cls])}
                 </span>
                 {w.introQuote && (
                   <p className="text-sm text-txt-muted italic">&ldquo;{w.introQuote}&rdquo;</p>
@@ -98,7 +102,7 @@ export default function WarriorShowcase() {
                   {statNames.map((name, i) => (
                     <StatBar
                       key={name}
-                      label={name}
+                      label={tStats(name)}
                       value={w.stats?.[statKeys[i]] || 0}
                       warriorClass={cls}
                     />

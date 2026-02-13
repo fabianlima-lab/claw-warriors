@@ -1,76 +1,81 @@
-import Link from 'next/link';
+'use client';
 
-const PLANS = [
-  {
-    name: 'Trial',
-    price: 'Free',
-    period: '7 days',
-    features: ['1 warrior', '1 channel (Telegram)', 'Unlimited messages', 'Web search', 'Full feature preview'],
-    cta: 'Start Free Trial',
-    href: '/signup?plan=trial',
-    highlight: false,
-  },
-  {
-    name: 'Pro',
-    price: '$39',
-    period: '/mo',
-    badge: 'Most Popular',
-    features: ['1 warrior', 'Telegram + WhatsApp (soon)', 'Unlimited messages', 'Web search', 'Custom name & tone', 'Persistent memory'],
-    cta: 'Choose Pro',
-    href: '/signup?plan=pro',
-    highlight: true,
-  },
-  {
-    name: 'Pro Tribe',
-    price: '$59',
-    period: '/mo',
-    features: ['3 warriors', 'Telegram + WhatsApp (soon)', 'Unlimited messages', 'Web search', 'Custom name & tone', 'Priority support'],
-    cta: 'Choose Pro Tribe',
-    href: '/signup?plan=pro_tribe',
-    highlight: false,
-  },
-];
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function PricingSection() {
+  const t = useTranslations('Pricing');
+
+  const PLANS = [
+    {
+      nameKey: 'trialName',
+      priceKey: 'trialPrice',
+      periodKey: 'trialPeriod',
+      features: ['feature_1warrior', 'feature_1channel', 'feature_unlimited', 'feature_search', 'feature_preview'],
+      ctaKey: 'trialCta',
+      href: '/signup?plan=trial',
+      highlight: false,
+    },
+    {
+      nameKey: 'proName',
+      priceKey: 'proPrice',
+      periodKey: 'proPeriod',
+      badgeKey: 'proBadge',
+      features: ['feature_1warrior', 'feature_2channels', 'feature_unlimited', 'feature_search', 'feature_customName', 'feature_memory'],
+      ctaKey: 'proCta',
+      href: '/signup?plan=pro',
+      highlight: true,
+    },
+    {
+      nameKey: 'proTribeName',
+      priceKey: 'proTribePrice',
+      periodKey: 'proTribePeriod',
+      features: ['feature_3warriors', 'feature_2channels', 'feature_unlimited', 'feature_search', 'feature_customName', 'feature_priority'],
+      ctaKey: 'proTribeCta',
+      href: '/signup?plan=pro_tribe',
+      highlight: false,
+    },
+  ];
+
   return (
     <section id="pricing" className="py-20 px-6 text-center">
       <span className="text-xs font-semibold text-accent tracking-[2px] uppercase">
-        PRICING
+        {t('label')}
       </span>
       <h2 className="font-[family-name:var(--font-display)] text-[clamp(32px,4vw,48px)] font-bold text-txt mt-3 mb-2">
-        Simple, Flat Pricing
+        {t('title')}
       </h2>
       <p className="text-[17px] text-txt-muted mb-12">
-        No surprise bills. No token tracking. No hidden fees.
+        {t('subtitle')}
       </p>
 
       <div className="flex gap-5 justify-center flex-wrap max-w-[860px] mx-auto">
         {PLANS.map((plan) => (
           <div
-            key={plan.name}
+            key={plan.nameKey}
             className="flex-1 min-w-[240px] max-w-[270px] rounded-[var(--radius-card)] p-8 text-left relative"
             style={{
               background: plan.highlight ? 'rgba(232,99,43,0.08)' : 'var(--color-card)',
               border: plan.highlight ? '1px solid rgba(232,99,43,0.3)' : '1px solid var(--color-border)',
             }}
           >
-            {plan.badge && (
+            {plan.badgeKey && (
               <div
                 className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-accent rounded-full px-3.5 py-0.5 text-xs font-bold text-white"
               >
-                {plan.badge}
+                {t(plan.badgeKey)}
               </div>
             )}
 
-            <h3 className="text-xl font-bold text-txt mb-1">{plan.name}</h3>
+            <h3 className="text-xl font-bold text-txt mb-1">{t(plan.nameKey)}</h3>
             <div className="flex items-baseline gap-1 mb-5">
-              <span className="font-[family-name:var(--font-display)] text-4xl font-extrabold text-txt">{plan.price}</span>
-              <span className="text-[15px] text-txt-muted">{plan.period}</span>
+              <span className="font-[family-name:var(--font-display)] text-4xl font-extrabold text-txt">{t(plan.priceKey)}</span>
+              <span className="text-[15px] text-txt-muted">{t(plan.periodKey)}</span>
             </div>
 
             {plan.features.map((f) => (
               <div key={f} className="flex items-center gap-2 py-1.5 text-[15px] text-txt-muted">
-                <span className="text-success text-xs">&#10003;</span> {f}
+                <span className="text-success text-xs">&#10003;</span> {t(f)}
               </div>
             ))}
 
@@ -82,7 +87,7 @@ export default function PricingSection() {
                   : 'border border-border text-txt-muted hover:bg-elevated'
               }`}
             >
-              {plan.cta}
+              {t(plan.ctaKey)}
             </Link>
           </div>
         ))}

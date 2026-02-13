@@ -1,17 +1,23 @@
-const STEPS = [
-  { num: '1', title: 'Pick Your Warrior', desc: 'Choose a personality that fits your vibe — work mode, creative, no-nonsense, or chill.' },
-  { num: '2', title: 'Connect Telegram', desc: 'One tap. Your warrior goes live in your favorite messaging app instantly.' },
-  { num: '3', title: 'Just Ask', desc: 'Text your warrior like a friend. It handles the rest — emails, calendar, research, anything.' },
-];
+'use client';
+
+import { useTranslations } from 'next-intl';
 
 export default function HowItWorks() {
+  const t = useTranslations('HowItWorks');
+
+  const STEPS = [
+    { num: '1', titleKey: 'step1_title', descKey: 'step1_desc' },
+    { num: '2', titleKey: 'step2_title', descKey: 'step2_desc' },
+    { num: '3', titleKey: 'step3_title', descKey: 'step3_desc' },
+  ];
+
   return (
     <section id="how" className="py-20 px-6 text-center">
       <span className="text-xs font-semibold text-accent tracking-[2px] uppercase">
-        GETTING STARTED
+        {t('label')}
       </span>
       <h2 className="font-[family-name:var(--font-display)] text-[clamp(32px,4vw,48px)] font-bold text-txt mt-3 mb-12 leading-tight">
-        Live in 3 Minutes. Seriously.
+        {t('title')}
       </h2>
 
       <div className="flex justify-center gap-6 flex-wrap max-w-[900px] mx-auto">
@@ -26,8 +32,8 @@ export default function HowItWorks() {
             >
               {s.num}
             </div>
-            <h3 className="text-xl font-bold text-txt mb-2">{s.title}</h3>
-            <p className="text-base text-txt-muted leading-relaxed">{s.desc}</p>
+            <h3 className="text-xl font-bold text-txt mb-2">{t(s.titleKey)}</h3>
+            <p className="text-base text-txt-muted leading-relaxed">{t(s.descKey)}</p>
           </div>
         ))}
       </div>

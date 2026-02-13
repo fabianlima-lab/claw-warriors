@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -19,67 +20,32 @@ const APPS_MAP = {
   notes: 'https://cdn.simpleicons.org/apple/white',
 };
 
-const USE_CASES = [
-  {
-    icon: '📧',
-    title: 'Manages Your Inbox',
-    description: 'Reads emails, drafts replies, unsubscribes from junk, and flags what matters.',
-    apps: ['gmail', 'slack'],
-    example: '"Hey, summarize my unread emails and draft a reply to the one from my landlord"',
-  },
-  {
-    icon: '📅',
-    title: 'Runs Your Calendar',
-    description: 'Schedules meetings, sends reminders, and warns you about conflicts — before you even ask.',
-    apps: ['gcal', 'notion'],
-    example: '"Move my Thursday meeting to Friday and let the team know on Slack"',
-  },
-  {
-    icon: '🛒',
-    title: 'Shops & Compares for You',
-    description: 'Finds the best price, tracks deals, applies coupons, and monitors price drops.',
-    apps: ['canva', 'sheets'],
-    example: '"Find me the best deal on AirPods Max and alert me if they drop below $400"',
-  },
-  {
-    icon: '📱',
-    title: 'Social Media Autopilot',
-    description: 'Drafts posts, suggests content ideas, schedules uploads, and tracks engagement.',
-    apps: ['instagram', 'x', 'youtube'],
-    example: '"Write 5 Instagram caption ideas for my new product launch"',
-  },
-  {
-    icon: '💰',
-    title: 'Tracks Your Money',
-    description: 'Monitors expenses, categorizes receipts, and gives you a weekly spending summary.',
-    apps: ['sheets', 'gdrive'],
-    example: '"How much did I spend on food this month? Show me a breakdown"',
-  },
-  {
-    icon: '🎵',
-    title: 'Controls Your World',
-    description: 'Plays music, orders rides, sets alarms, and connects your smart home — all from chat.',
-    apps: ['spotify', 'notes'],
-    example: '"Play my chill playlist on Spotify and save my meeting notes to Apple Notes"',
-  },
+const USE_CASE_KEYS = [
+  { icon: '📧', key: 'inbox', apps: ['gmail', 'slack'] },
+  { icon: '📅', key: 'calendar', apps: ['gcal', 'notion'] },
+  { icon: '🛒', key: 'shopping', apps: ['canva', 'sheets'] },
+  { icon: '📱', key: 'social', apps: ['instagram', 'x', 'youtube'] },
+  { icon: '💰', key: 'money', apps: ['sheets', 'gdrive'] },
+  { icon: '🎵', key: 'control', apps: ['spotify', 'notes'] },
 ];
 
 export default function AgentValueProps() {
   const [active, setActive] = useState(0);
+  const t = useTranslations('ValueProps');
 
   return (
     <section className="py-20 px-6">
       <div className="text-center mb-12">
         <span className="text-xs font-semibold text-accent tracking-[2px] uppercase">
-          WHAT IT ACTUALLY DOES
+          {t('label')}
         </span>
         <h2 className="font-[family-name:var(--font-display)] text-[clamp(32px,4vw,48px)] font-bold text-txt mt-3 leading-tight">
-          One Chat. Everything Handled.
+          {t('title')}
         </h2>
       </div>
 
       <div className="max-w-[900px] mx-auto flex flex-col gap-3">
-        {USE_CASES.map((uc, i) => (
+        {USE_CASE_KEYS.map((uc, i) => (
           <div
             key={i}
             onClick={() => setActive(active === i ? -1 : i)}
@@ -93,9 +59,9 @@ export default function AgentValueProps() {
               <div className="flex items-center gap-4">
                 <span className="text-[28px]">{uc.icon}</span>
                 <div>
-                  <h3 className="text-xl font-semibold text-txt">{uc.title}</h3>
+                  <h3 className="text-xl font-semibold text-txt">{t(`${uc.key}_title`)}</h3>
                   {active !== i && (
-                    <p className="text-[15px] text-txt-muted mt-1">{uc.description}</p>
+                    <p className="text-[15px] text-txt-muted mt-1">{t(`${uc.key}_desc`)}</p>
                   )}
                 </div>
               </div>
@@ -114,7 +80,7 @@ export default function AgentValueProps() {
 
             {active === i && (
               <div className="mt-4 pl-11">
-                <p className="text-base text-txt-muted mb-3 leading-relaxed">{uc.description}</p>
+                <p className="text-base text-txt-muted mb-3 leading-relaxed">{t(`${uc.key}_desc`)}</p>
                 <div
                   className="rounded-[10px] px-4 py-3"
                   style={{
@@ -123,7 +89,7 @@ export default function AgentValueProps() {
                   }}
                 >
                   <p className="font-[family-name:var(--font-mono)] text-[15px] text-txt-muted italic">
-                    {uc.example}
+                    {t(`${uc.key}_example`)}
                   </p>
                 </div>
               </div>

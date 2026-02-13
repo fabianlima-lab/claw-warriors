@@ -1,8 +1,11 @@
 'use client';
 
 import { CLASSES, CLASS_LABELS, CLASS_ICONS, CLASS_HEX } from '@/lib/constants';
+import { useTranslations } from 'next-intl';
 
 export default function ClassTabs({ selected, onSelect }) {
+  const t = useTranslations('Classes');
+
   return (
     <div className="flex flex-wrap gap-2 justify-center">
       {CLASSES.map((cls) => {
@@ -18,7 +21,7 @@ export default function ClassTabs({ selected, onSelect }) {
             }`}
             style={active ? { background: CLASS_HEX[cls] } : {}}
           >
-            {CLASS_ICONS[cls]} {CLASS_LABELS[cls]}
+            {CLASS_ICONS[cls]} {t(CLASS_LABELS[cls])}
           </button>
         );
       })}

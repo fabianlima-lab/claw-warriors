@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function HeroSection() {
   const [visible, setVisible] = useState(false);
+  const t = useTranslations('Hero');
+
   useEffect(() => { setTimeout(() => setVisible(true), 100); }, []);
 
   return (
@@ -26,22 +29,22 @@ export default function HeroSection() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 bg-accent-glow border border-[rgba(232,99,43,0.2)] rounded-full px-4 py-1.5 mb-8">
           <span className="text-xs font-semibold text-accent tracking-[1.5px] uppercase">
-            Powered by OpenClaw
+            {t('badge')}
           </span>
         </div>
 
         {/* Headline */}
         <h1 className="font-[family-name:var(--font-display)] text-[clamp(40px,6vw,72px)] font-extrabold text-txt leading-[1.1] max-w-[800px] mx-auto mb-6">
-          Your AI Assistant<br />
-          <span className="text-accent">That Actually Does Things</span>
+          {t('headlineTop')}<br />
+          <span className="text-accent">{t('headlineAccent')}</span>
         </h1>
 
         {/* Subtitle */}
         <p className="text-[clamp(18px,2vw,22px)] text-txt-muted max-w-[580px] mx-auto mb-4 leading-relaxed">
-          Manages your emails, runs your calendar, tracks expenses, posts on social media — all from a simple text message on Telegram.
+          {t('subtitle')}
         </p>
         <p className="text-[17px] text-txt-dim max-w-[480px] mx-auto mb-10 leading-normal">
-          No coding. No API keys. No surprise bills. Just pick a warrior and start chatting.
+          {t('subtitleSecondary')}
         </p>
 
         {/* CTAs */}
@@ -51,27 +54,27 @@ export default function HeroSection() {
             className="bg-accent text-white border-none rounded-[var(--radius-btn)] px-8 py-3.5 text-base font-bold hover:opacity-90 transition-all"
             style={{ boxShadow: '0 4px 24px rgba(232,99,43,0.3)' }}
           >
-            Start 7-Day Free Trial
+            {t('ctaPrimary')}
           </Link>
           <Link
             href="/demo"
             className="bg-transparent text-txt-muted border border-border rounded-[var(--radius-btn)] px-8 py-3.5 text-base font-medium hover:bg-elevated transition-all"
           >
-            Watch Demo →
+            {t('ctaSecondary')}
           </Link>
         </div>
 
         {/* Trust bar */}
         <div className="flex items-center justify-center gap-6 mt-12 flex-wrap">
           {[
-            { icon: '💬', text: 'Chat on Telegram' },
-            { icon: '♾️', text: 'Unlimited Messages' },
-            { icon: '🧠', text: 'Remembers Everything' },
-            { icon: '🔒', text: '$0 API Keys' },
+            { icon: '💬', textKey: 'trustChat' },
+            { icon: '♾️', textKey: 'trustUnlimited' },
+            { icon: '🧠', textKey: 'trustMemory' },
+            { icon: '🔒', textKey: 'trustFree' },
           ].map((item) => (
-            <div key={item.text} className="flex items-center gap-1.5 text-txt-dim text-[15px]">
+            <div key={item.textKey} className="flex items-center gap-1.5 text-txt-dim text-[15px]">
               <span>{item.icon}</span>
-              <span>{item.text}</span>
+              <span>{t(item.textKey)}</span>
             </div>
           ))}
         </div>

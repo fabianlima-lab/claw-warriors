@@ -1,25 +1,27 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
-const MESSAGES = [
-  { from: 'user', text: 'Hey Mia, check my Gmail and summarize anything urgent' },
-  { from: 'bot', name: 'Mia', text: 'On it! You have 3 unread emails. One urgent: your flight to Orlando was changed to 6:15 AM. Want me to update your calendar and set an earlier alarm?' },
-  { from: 'user', text: 'Yes please, and order me an Uber for 4:30 AM' },
-  { from: 'bot', name: 'Mia', text: 'Done \u2713 Calendar updated, alarm set for 4:00 AM, and Uber scheduled for 4:30 AM to AUS airport. Anything else?' },
-];
+import { useTranslations } from 'next-intl';
 
 export default function ChatDemo() {
   const [step, setStep] = useState(0);
+  const t = useTranslations('ChatDemo');
+
+  const MESSAGES = [
+    { from: 'user', text: t('userMsg1') },
+    { from: 'bot', name: 'Mia', text: t('botMsg1') },
+    { from: 'user', text: t('userMsg2') },
+    { from: 'bot', name: 'Mia', text: t('botMsg2') },
+  ];
 
   useEffect(() => {
     if (step < MESSAGES.length) {
-      const t = setTimeout(() => setStep((s) => s + 1), step === 0 ? 1200 : 2000);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setStep((s) => s + 1), step === 0 ? 1200 : 2000);
+      return () => clearTimeout(timer);
     }
     const reset = setTimeout(() => setStep(0), 4000);
     return () => clearTimeout(reset);
-  }, [step]);
+  }, [step, MESSAGES.length]);
 
   return (
     <section className="px-6 pb-20 flex justify-center">
@@ -32,8 +34,8 @@ export default function ChatDemo() {
             ⚔️
           </div>
           <div>
-            <div className="font-semibold text-base text-txt">Mia &middot; Guardian</div>
-            <div className="text-[13px] text-success">● Online — Telegram</div>
+            <div className="font-semibold text-base text-txt">{t('botName')}</div>
+            <div className="text-[13px] text-success">{t('onlineStatus')}</div>
           </div>
         </div>
 

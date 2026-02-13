@@ -23,11 +23,11 @@ export const CLASS_ICONS = {
 };
 
 export const CLASS_STAT_NAMES = {
-  guardian: ['Protection', 'Precision', 'Loyalty'],
-  scholar: ['Wisdom', 'Patience', 'Clarity'],
-  bard: ['Creativity', 'Strategy', 'Momentum'],
-  artificer: ['Precision', 'Speed', 'Depth'],
-  rogue: ['Analysis', 'Speed', 'Instinct'],
+  guardian: ['protection', 'precision', 'loyalty'],
+  scholar: ['wisdom', 'patience', 'clarity'],
+  bard: ['creativity', 'strategy', 'momentum'],
+  artificer: ['precision', 'speed', 'depth'],
+  rogue: ['analysis', 'speed', 'instinct'],
 };
 
 export const CLASS_STAT_KEYS = {
@@ -39,19 +39,19 @@ export const CLASS_STAT_KEYS = {
 };
 
 export const CLASS_LABELS = {
-  guardian: 'Guardian',
-  scholar: 'Scholar',
-  bard: 'Bard',
-  artificer: 'Artificer',
-  rogue: 'Rogue',
+  guardian: 'guardian',
+  scholar: 'scholar',
+  bard: 'bard',
+  artificer: 'artificer',
+  rogue: 'rogue',
 };
 
 export const CLASS_DESCRIPTIONS = {
-  guardian: 'Protectors & Assistants',
-  scholar: 'Learners & Tutors',
-  bard: 'Content Creators',
-  artificer: 'Developers & Builders',
-  rogue: 'Traders & Analysts',
+  guardian: 'guardian_desc',
+  scholar: 'scholar_desc',
+  bard: 'bard_desc',
+  artificer: 'artificer_desc',
+  rogue: 'rogue_desc',
 };
 
 export const TIER_FEATURES = {
@@ -81,12 +81,12 @@ export const TIER_FEATURES = {
 };
 
 export const GOAL_OPTIONS = [
-  { id: 'productivity', label: 'Productivity & Organization', icon: '⚔️', class: 'guardian' },
-  { id: 'learning', label: 'Learning & Research', icon: '📚', class: 'scholar' },
-  { id: 'content', label: 'Content Creation', icon: '🎭', class: 'bard' },
-  { id: 'coding', label: 'Coding & Building', icon: '🔨', class: 'artificer' },
-  { id: 'trading', label: 'Trading & Analysis', icon: '🗡️', class: 'rogue' },
-  { id: 'general', label: 'General Assistant', icon: '✨', class: 'guardian' },
+  { id: 'productivity', labelKey: 'productivity', icon: '⚔️', class: 'guardian' },
+  { id: 'learning', labelKey: 'learning', icon: '📚', class: 'scholar' },
+  { id: 'content', labelKey: 'content', icon: '🎭', class: 'bard' },
+  { id: 'coding', labelKey: 'coding', icon: '🔨', class: 'artificer' },
+  { id: 'trading', labelKey: 'trading', icon: '🗡️', class: 'rogue' },
+  { id: 'general', labelKey: 'general', icon: '✨', class: 'guardian' },
 ];
 
 export const CLASSES = ['guardian', 'scholar', 'bard', 'artificer', 'rogue'];

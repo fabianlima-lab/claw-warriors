@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Card from '@/components/ui/Card';
 import StatBar from '@/components/ui/StatBar';
 import { CLASS_LABELS, CLASS_STAT_NAMES, CLASS_STAT_KEYS, CLASS_HEX } from '@/lib/constants';
+import { useTranslations } from 'next-intl';
 
 export default function WarriorCard({
   warrior,
@@ -12,6 +13,9 @@ export default function WarriorCard({
   onClick,
   showStats = true,
 }) {
+  const tClasses = useTranslations('Classes');
+  const tStats = useTranslations('Stats');
+
   const imgSize = size === 'lg' ? 120 : size === 'sm' ? 64 : 80;
   const cls = warrior.warriorClass || warrior.warrior_class;
   const color = CLASS_HEX[cls];
@@ -43,7 +47,7 @@ export default function WarriorCard({
             className="text-xs uppercase tracking-wider font-medium"
             style={{ color }}
           >
-            {CLASS_LABELS[cls]}
+            {tClasses(CLASS_LABELS[cls])}
           </span>
         </div>
         {warrior.introQuote && (
@@ -56,7 +60,7 @@ export default function WarriorCard({
             {statNames.map((name, i) => (
               <StatBar
                 key={name}
-                label={name}
+                label={tStats(name)}
                 value={stats[statKeys[i]] || 0}
                 warriorClass={cls}
               />

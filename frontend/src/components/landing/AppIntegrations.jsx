@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 /* eslint-disable @next/next/no-img-element */
 
 const APPS = [
@@ -22,16 +24,18 @@ const APPS = [
 ];
 
 export default function AppIntegrations() {
+  const t = useTranslations('Integrations');
+
   return (
     <section id="apps" className="py-20 px-6 text-center">
       <span className="text-xs font-semibold text-accent tracking-[2px] uppercase">
-        INTEGRATIONS
+        {t('label')}
       </span>
       <h2 className="font-[family-name:var(--font-display)] text-[clamp(32px,4vw,48px)] font-bold text-txt mt-3 mb-3 leading-tight">
-        Works With Apps You Already Use
+        {t('title')}
       </h2>
       <p className="text-lg text-txt-muted max-w-[500px] mx-auto mb-12">
-        Your warrior connects to 50+ apps. No setup wizards. Just tell it what you need.
+        {t('subtitle')}
       </p>
 
       <div className="flex flex-wrap justify-center gap-5 max-w-[680px] mx-auto">
@@ -55,7 +59,7 @@ export default function AppIntegrations() {
       </div>
 
       <p className="text-[15px] text-txt-dim mt-8">
-        + Uber, Todoist, Whoop, Obsidian, WordPress, and 30 more via OpenClaw skills
+        {t('moreApps')}
       </p>
     </section>
   );

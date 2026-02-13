@@ -1,4 +1,5 @@
 import { Cinzel, DM_Sans } from "next/font/google";
+import { getLocale } from "next-intl/server";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -15,26 +16,15 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-export const metadata = {
-  title: "ClawWarriors — Your AI Warrior, Your Rules",
-  description:
-    "Deploy personalized AI agents to Telegram and WhatsApp. Pick a warrior, connect your channel, start chatting — all in under 5 minutes.",
-  manifest: "/manifest.json",
-  icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-    ],
-    apple: "/icon-192.png",
-  },
-};
-
 export const viewport = {
   themeColor: "#08090E",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const locale = await getLocale();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={`${cinzel.variable} ${dmSans.variable} antialiased`}>
         {children}
       </body>

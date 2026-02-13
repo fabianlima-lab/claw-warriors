@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
+import { useTranslations } from 'next-intl';
 
 export default function ChatWidget({
   warriorName = 'Luna',
@@ -15,6 +16,8 @@ export default function ChatWidget({
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const bottomRef = useRef(null);
+  const t = useTranslations('Common');
+  const tDemo = useTranslations('Demo');
 
   useEffect(() => {
     if (externalMessages) setMessages(externalMessages);
@@ -41,7 +44,7 @@ export default function ChatWidget({
     } catch {
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant', content: 'Something went wrong. Try again.' },
+        { role: 'assistant', content: tDemo('chatError') },
       ]);
     } finally {
       setSending(false);
@@ -61,7 +64,7 @@ export default function ChatWidget({
         />
         <div>
           <span className="text-sm font-medium text-txt">{warriorName}</span>
-          <span className="text-xs text-txt-dim ml-2">Online</span>
+          <span className="text-xs text-txt-dim ml-2">{t('online')}</span>
         </div>
       </div>
 
@@ -86,7 +89,7 @@ export default function ChatWidget({
         {sending && (
           <div className="flex justify-start">
             <div className="bg-elevated text-txt-dim px-4 py-2.5 rounded-2xl rounded-bl-sm text-sm">
-              <span className="animate-pulse">Typing...</span>
+              <span className="animate-pulse">{t('typing')}</span>
             </div>
           </div>
         )}
@@ -100,11 +103,11 @@ export default function ChatWidget({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          placeholder="Type a message..."
+          placeholder={t('typing').replace('...', '') + '...'}
           className="flex-1 bg-elevated border border-border rounded-[var(--radius-btn)] px-4 py-2.5 text-sm text-txt placeholder:text-txt-dim focus:outline-none focus:border-accent transition-colors"
         />
         <Button onClick={handleSend} disabled={!input.trim() || sending} className="px-4 py-2.5">
-          Send
+          {t('send')}
         </Button>
       </div>
     </div>
