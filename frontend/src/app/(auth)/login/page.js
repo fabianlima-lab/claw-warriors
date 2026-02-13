@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { GoogleLogin } from '@react-oauth/google';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { apiPost, apiFetch } from '@/lib/api';
+import { useGoogleAuth } from '@/lib/google-auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -14,6 +16,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { handleCredentialResponse, loading: googleLoading, error: googleError } = useGoogleAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +41,8 @@ export default function LoginPage() {
     }
   };
 
+  const displayError = error || googleError;
+
   return (
     <Card className="w-full max-w-md p-8">
       <div className="text-center mb-8">
@@ -54,13 +59,26 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={() => console.log('Google OAuth not yet configured')}
-        className="w-full flex items-center justify-center gap-2 border border-border rounded-[var(--radius-btn)] py-3 text-sm text-txt-body hover:bg-elevated transition-colors cursor-pointer"
-      >
-        Continue with Google
-      </button>
+      {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? (
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleCredentialResponse}
+            onError={() => setError('Google sign-in failed. Please try again.')}
+            theme="filled_black"
+            size="large"
+            width="400"
+            text="continue_with"
+          />
+        </div>
+      ) : (
+        <button
+          type="button"
+          disabled
+          className="w-full flex items-center justify-center gap-2 border border-border rounded-[var(--radius-btn)] py-3 text-sm text-txt-dim cursor-not-allowed opacity-50"
+        >
+          Continue with Google
+        </button>
+      )}
 
       <div className="flex items-center gap-3 my-6">
         <div className="flex-1 h-px bg-border" />
@@ -87,8 +105,8 @@ export default function LoginPage() {
           placeholder="Enter your password"
           required
         />
-        {error && <p className="text-danger text-sm">{error}</p>}
-        <Button type="submit" loading={loading} className="w-full">
+        {displayError && <p className="text-danger text-sm">{displayError}</p>}
+        <Button type="submit" loading={loading || googleLoading} className="w-full">
           Log In
         </Button>
       </form>

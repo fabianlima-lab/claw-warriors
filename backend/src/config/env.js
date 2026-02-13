@@ -34,6 +34,9 @@ const env = {
   // Telegram
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
 
+  // Google OAuth
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+
   // AI Models (Kimi K2.5 via NVIDIA)
   NVIDIA_API_KEY: process.env.NVIDIA_API_KEY,
 

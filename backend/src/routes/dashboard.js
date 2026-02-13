@@ -44,6 +44,7 @@ async function dashboardRoutes(app) {
       return reply.send({
         email: user.email,
         goals: user.goals,
+        auth_provider: user.authProvider,
         tier: user.tier,
         trial_ends_at: user.trialEndsAt,
         trial_expired: trialExpired,
