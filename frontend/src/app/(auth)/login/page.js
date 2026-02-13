@@ -30,7 +30,11 @@ export default function LoginPage() {
       const dest = await resolveDestination();
       router.push(dest);
     } catch (err) {
-      setError(err.message || 'Sign in failed');
+      setError(
+        err.message === 'Failed to fetch'
+          ? 'Unable to reach server. Please check your connection and try again.'
+          : err.message || 'Sign in failed'
+      );
     } finally {
       setLoading(false);
     }

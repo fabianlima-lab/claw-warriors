@@ -35,7 +35,9 @@ async function build() {
 
   // Plugins
   await app.register(cors, {
-    origin: env.NODE_ENV === 'production' ? env.APP_URL : true,
+    origin: env.NODE_ENV === 'production'
+      ? [env.APP_URL, env.APP_URL.replace('://', '://www.')]
+      : true,
     credentials: true,
   });
 

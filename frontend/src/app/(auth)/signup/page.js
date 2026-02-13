@@ -41,7 +41,11 @@ function SignupForm() {
       }
       router.push('/onboarding');
     } catch (err) {
-      setError(err.message || 'Signup failed');
+      setError(
+        err.message === 'Failed to fetch'
+          ? 'Unable to reach server. Please check your connection and try again.'
+          : err.message || 'Signup failed'
+      );
     } finally {
       setLoading(false);
     }
