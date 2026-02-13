@@ -24,13 +24,20 @@ export default function WarriorsPage() {
     // Load templates
     apiFetch('/warriors/templates')
       .then((data) => {
-        const grouped = {};
-        (data.templates || data).forEach((w) => {
-          const cls = w.warriorClass || w.warrior_class;
-          if (!grouped[cls]) grouped[cls] = [];
-          grouped[cls].push(w);
-        });
-        setTemplates(grouped);
+        const raw = data.templates || data;
+        // API returns pre-grouped object {guardian:[...], scholar:[...]}
+        // or an array of templates — handle both
+        if (Array.isArray(raw)) {
+          const grouped = {};
+          raw.forEach((w) => {
+            const cls = w.warriorClass || w.warrior_class;
+            if (!grouped[cls]) grouped[cls] = [];
+            grouped[cls].push(w);
+          });
+          setTemplates(grouped);
+        } else {
+          setTemplates(raw);
+        }
       })
       .catch(() => {});
 
