@@ -16,7 +16,7 @@ async function authRoutes(app) {
       rateLimit: { max: 3, timeWindow: '1 minute' },
     },
   }, async (request, reply) => {
-    const { email, password, name } = request.body || {};
+    const { email, password } = request.body || {};
 
     if (!email || !password) {
       return reply.code(400).send({ error: 'Email and password are required' });
@@ -30,8 +30,6 @@ async function authRoutes(app) {
       return reply.code(400).send({ error: 'Password must be at least 8 characters' });
     }
 
-    const cleanName = name ? stripHtml(String(name)).slice(0, 255) : null;
-
     try {
       const existing = await prisma.user.findUnique({ where: { email } });
       if (existing) {
@@ -44,16 +42,8 @@ async function authRoutes(app) {
         data: {
           email,
           passwordHash,
-          name: cleanName,
-        },
-      });
-
-      // Create energy record for the user
-      await prisma.energy.create({
-        data: {
-          userId: user.id,
-          monthlyAllocation: 0,
-          resetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          tier: 'trial',
+          trialEndsAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         },
       });
 

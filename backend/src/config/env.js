@@ -19,12 +19,12 @@ const env = {
 
   // Auth
   JWT_SECRET: process.env.JWT_SECRET,
-  SESSION_SECRET: process.env.SESSION_SECRET || 'dev-session-secret',
 
   // Stripe
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-  STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+  STRIPE_PRICE_PRO: process.env.STRIPE_PRICE_PRO,
+  STRIPE_PRICE_PRO_TRIBE: process.env.STRIPE_PRICE_PRO_TRIBE,
 
   // Twilio
   TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
@@ -34,13 +34,8 @@ const env = {
   // Telegram
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
 
-  // AI Models
-  MINIMAX_API_KEY: process.env.MINIMAX_API_KEY,
-  ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
-
-  // APIs
-  BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
-  OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+  // AI Models (Kimi K2.5 via NVIDIA)
+  NVIDIA_API_KEY: process.env.NVIDIA_API_KEY,
 
   // App
   APP_URL: process.env.APP_URL || 'http://localhost:3000',

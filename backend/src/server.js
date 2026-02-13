@@ -10,12 +10,27 @@ import billingRoutes from './routes/billing.js';
 import dashboardRoutes from './routes/dashboard.js';
 import demoRoutes from './routes/demo.js';
 import webhookRoutes from './routes/webhooks.js';
+import channelRoutes from './routes/channels.js';
+import userRoutes from './routes/users.js';
 
 async function build() {
   const app = Fastify({
     logger: {
       level: env.NODE_ENV === 'production' ? 'info' : 'debug',
     },
+  });
+
+  // Add raw body support for Stripe webhook signature verification
+  app.addContentTypeParser('application/json', { parseAs: 'buffer' }, (req, body, done) => {
+    try {
+      // Store raw body for Stripe webhook verification
+      req.rawBody = body;
+      const json = JSON.parse(body.toString());
+      done(null, json);
+    } catch (err) {
+      err.statusCode = 400;
+      done(err, undefined);
+    }
   });
 
   // Plugins
@@ -54,6 +69,8 @@ async function build() {
   app.register(dashboardRoutes, { prefix: '/api/dashboard' });
   app.register(demoRoutes, { prefix: '/api/demo' });
   app.register(webhookRoutes, { prefix: '/api/webhooks' });
+  app.register(channelRoutes, { prefix: '/api/channels' });
+  app.register(userRoutes, { prefix: '/api/users' });
 
   return app;
 }

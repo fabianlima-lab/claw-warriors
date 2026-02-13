@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { isTrialExpired, getFeaturesByTier } from '../utils/helpers.js';
+import env from '../config/env.js';
 
 const prisma = new PrismaClient();
 
@@ -14,8 +16,7 @@ async function dashboardRoutes(app) {
 
     try {
       const user = await prisma.user.findUnique({ where: { id: userId } });
-      const energy = await prisma.energy.findUnique({ where: { userId } });
-      const warrior = await prisma.warrior.findFirst({
+      const activeWarriors = await prisma.warrior.count({
         where: { userId, isActive: true },
       });
 
@@ -31,25 +32,30 @@ async function dashboardRoutes(app) {
         where: { userId, createdAt: { gte: startOfMonth } },
       });
 
-      const daysUntilReset = energy
+      const trialExpired = isTrialExpired(user);
+      const daysRemaining = user.trialEndsAt
         ? Math.max(0, Math.ceil(
-          (new Date(energy.resetDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-        ))
-        : 0;
+            (new Date(user.trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+          ))
+        : null;
+
+      const features = getFeaturesByTier(user.tier);
 
       return reply.send({
-        energy_used: energy?.usedThisMonth || 0,
-        energy_total: energy?.monthlyAllocation || 0,
-        energy_percent: energy?.monthlyAllocation
-          ? Math.round((energy.usedThisMonth / energy.monthlyAllocation) * 100)
-          : 0,
+        email: user.email,
+        goals: user.goals,
+        tier: user.tier,
+        trial_ends_at: user.trialEndsAt,
+        trial_expired: trialExpired,
+        trial_days_remaining: daysRemaining,
+        active_warriors: activeWarriors,
+        max_warriors: features.max_active_warriors,
         messages_today: messagesToday,
         messages_this_month: messagesThisMonth,
-        warrior_status: warrior
-          ? (warrior.isActive ? 'active' : 'inactive')
-          : 'none',
-        tier: user?.tier || 'free',
-        days_until_reset: daysUntilReset,
+        channel: user.channel,
+        channel_2: user.channel2,
+        features,
+        upgrade_url: trialExpired ? `${env.APP_URL}/upgrade` : null,
       });
     } catch (error) {
       console.error('[ERROR] dashboard stats failed:', error.message);

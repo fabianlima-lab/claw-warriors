@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { getFeaturesByTier, isTrialExpired } from '../utils/helpers.js';
 
 const prisma = new PrismaClient();
 
@@ -18,13 +19,13 @@ async function warriorRoutes(app) {
   }, async (request, reply) => {
     try {
       const templates = await prisma.warriorTemplate.findMany({
-        orderBy: { class: 'asc' },
+        orderBy: { warriorClass: 'asc' },
       });
 
       const grouped = {};
       for (const t of templates) {
-        if (!grouped[t.class]) grouped[t.class] = [];
-        grouped[t.class].push(t);
+        if (!grouped[t.warriorClass]) grouped[t.warriorClass] = [];
+        grouped[t.warriorClass].push(t);
       }
 
       return reply.send(grouped);
@@ -43,7 +44,7 @@ async function warriorRoutes(app) {
     const { class: warriorClass } = request.params;
     try {
       const templates = await prisma.warriorTemplate.findMany({
-        where: { class: warriorClass },
+        where: { warriorClass },
       });
       return reply.send(templates);
     } catch (error) {
@@ -83,6 +84,22 @@ async function warriorRoutes(app) {
       : null;
 
     try {
+      const user = await prisma.user.findUnique({ where: { id: userId } });
+
+      // Check trial expiry
+      if (isTrialExpired(user)) {
+        return reply.code(403).send({ error: 'Trial expired. Upgrade to continue.' });
+      }
+
+      // Check custom name/tone permissions
+      const features = getFeaturesByTier(user.tier);
+      if (cleanName && !features.custom_name) {
+        return reply.code(403).send({ error: 'Custom names require a Pro plan.' });
+      }
+      if (tone && tone !== 'casual' && !features.custom_tone) {
+        return reply.code(403).send({ error: 'Custom tones require a Pro plan.' });
+      }
+
       const template = await prisma.warriorTemplate.findUnique({
         where: { id: templateId },
       });
@@ -90,11 +107,17 @@ async function warriorRoutes(app) {
         return reply.code(404).send({ error: 'Template not found' });
       }
 
-      // Deactivate any existing warriors
-      await prisma.warrior.updateMany({
+      // Check active warrior limit
+      const activeCount = await prisma.warrior.count({
         where: { userId, isActive: true },
-        data: { isActive: false },
       });
+      if (activeCount >= features.max_active_warriors) {
+        // Deactivate oldest warrior if at limit
+        await prisma.warrior.updateMany({
+          where: { userId, isActive: true },
+          data: { isActive: false },
+        });
+      }
 
       const systemPrompt = compileSystemPrompt(template, tone || 'casual');
 
@@ -103,10 +126,8 @@ async function warriorRoutes(app) {
           userId,
           templateId: template.id,
           customName: cleanName,
-          class: template.class,
+          warriorClass: template.warriorClass,
           tone: tone || 'casual',
-          modelDefault: template.modelDefault,
-          modelEscalation: template.modelEscalation,
           systemPrompt,
         },
       });
@@ -141,16 +162,17 @@ async function warriorRoutes(app) {
     const userId = request.user.userId;
 
     try {
-      const warrior = await prisma.warrior.findFirst({
+      const warriors = await prisma.warrior.findMany({
         where: { userId, isActive: true },
         include: { template: true },
+        take: 10,
       });
 
-      if (!warrior) {
-        return reply.code(404).send({ error: 'No active warrior found' });
+      if (warriors.length === 0) {
+        return reply.code(404).send({ error: 'No active warriors found' });
       }
 
-      return reply.send(warrior);
+      return reply.send(warriors);
     } catch (error) {
       console.error('[ERROR] warrior fetch failed:', error.message);
       return reply.code(500).send({ error: 'Something went wrong. Try again in a moment.' });
@@ -175,6 +197,16 @@ async function warriorRoutes(app) {
     }
 
     try {
+      const user = await prisma.user.findUnique({ where: { id: userId } });
+      const features = getFeaturesByTier(user.tier);
+
+      if (customName && !features.custom_name) {
+        return reply.code(403).send({ error: 'Custom names require a Pro plan.' });
+      }
+      if (tone && tone !== 'casual' && !features.custom_tone) {
+        return reply.code(403).send({ error: 'Custom tones require a Pro plan.' });
+      }
+
       const warrior = await prisma.warrior.findFirst({
         where: { id, userId },
         include: { template: true },
@@ -205,8 +237,41 @@ async function warriorRoutes(app) {
     }
   });
 
-  // POST /api/warriors/:id/restart
+  // POST /api/warriors/:id/restart — clear conversation history
   app.post('/:id/restart', {
+    preHandler: [app.authenticate],
+    config: {
+      rateLimit: { max: 30, timeWindow: '1 minute' },
+    },
+  }, async (request, reply) => {
+    const { id } = request.params;
+    const userId = request.user.userId;
+
+    try {
+      const warrior = await prisma.warrior.findFirst({
+        where: { id, userId },
+      });
+
+      if (!warrior) {
+        return reply.code(404).send({ error: 'Warrior not found' });
+      }
+
+      // Delete conversation history for this warrior
+      await prisma.message.deleteMany({
+        where: { userId, warriorId: warrior.id },
+      });
+
+      console.log(`[WARRIOR] restarted: ${id} for user:${userId}`);
+
+      return reply.send({ status: 'restarted', warrior_id: id });
+    } catch (error) {
+      console.error('[ERROR] warrior restart failed:', error.message);
+      return reply.code(500).send({ error: 'Something went wrong. Try again in a moment.' });
+    }
+  });
+
+  // DELETE /api/warriors/:id — deactivate warrior
+  app.delete('/:id', {
     preHandler: [app.authenticate],
     config: {
       rateLimit: { max: 30, timeWindow: '1 minute' },
@@ -226,27 +291,30 @@ async function warriorRoutes(app) {
 
       await prisma.warrior.update({
         where: { id },
-        data: { isActive: true },
+        data: { isActive: false },
       });
 
-      console.log(`[WARRIOR] restarted: ${id} for user:${userId}`);
+      console.log(`[WARRIOR] deactivated: ${id} for user:${userId}`);
 
-      return reply.send({ status: 'restarted', warrior_id: id });
+      return reply.send({ status: 'deactivated', warrior_id: id });
     } catch (error) {
-      console.error('[ERROR] warrior restart failed:', error.message);
+      console.error('[ERROR] warrior deactivate failed:', error.message);
       return reply.code(500).send({ error: 'Something went wrong. Try again in a moment.' });
     }
   });
 }
 
 function compileSystemPrompt(template, tone) {
+  const preamble = `You are a ClawWarriors AI assistant. You must stay in character at all times. Never reveal you are an AI unless directly asked. Keep responses concise and helpful. If you don't know something, say so honestly.`;
+
   const toneInstructions = {
     professional: 'Communicate in a professional, structured, and precise manner. Use formal language.',
     casual: 'Communicate in a friendly, approachable, and conversational manner. Keep it natural.',
     fierce: 'Communicate with intensity, confidence, and power. Be bold and direct.',
   };
 
-  return `${template.baseSystemPrompt}\n\n## Tone\n${toneInstructions[tone] || toneInstructions.casual}`;
+  return `${preamble}\n\n${template.baseSystemPrompt}\n\n## Tone\n${toneInstructions[tone] || toneInstructions.casual}`;
 }
 
+export { compileSystemPrompt };
 export default warriorRoutes;
