@@ -44,7 +44,7 @@ const SKILLS = [
 
 const STATUS_STYLES = {
   active: { label: 'Active', color: 'text-success', bg: 'bg-success/10' },
-  built_in: { label: 'Built-in', color: 'text-guardian', bg: 'bg-guardian/10' },
+  built_in: { label: 'Built-in', color: 'text-accent', bg: 'bg-accent/10' },
   not_connected: { label: 'Not Connected', color: 'text-txt-dim', bg: 'bg-elevated' },
   coming_soon: { label: 'Coming Soon', color: 'text-txt-dim', bg: 'bg-elevated' },
 };
@@ -62,7 +62,7 @@ export default function SkillsPage() {
       <div className="flex items-center gap-4 mt-4 text-sm">
         <span className="text-success font-medium">{activeCount} Active</span>
         <span className="text-txt-dim">·</span>
-        <span className="text-guardian font-medium">{builtInCount} Built-in</span>
+        <span className="text-accent font-medium">{builtInCount} Built-in</span>
         <span className="text-txt-dim">·</span>
         <span className="text-txt-muted">{availableCount} Available</span>
       </div>

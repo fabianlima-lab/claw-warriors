@@ -55,7 +55,7 @@ export default function ChannelPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
       <div className="text-center mb-10">
-        <SectionLabel warriorClass="guardian">Step 3 of 4</SectionLabel>
+        <SectionLabel>Step 3 of 4</SectionLabel>
         <h1 className="font-[family-name:var(--font-display)] text-3xl text-txt mt-3">
           Deploy Your Warrior
         </h1>
@@ -105,7 +105,7 @@ export default function ChannelPage() {
                 href="https://t.me/ClawWarriorsBot"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-guardian text-bg px-6 py-3 rounded-[var(--radius-btn)] font-medium hover:brightness-110 transition-all text-sm inline-flex items-center gap-2"
+                className="bg-accent text-white px-6 py-3 rounded-[var(--radius-btn)] font-medium hover:opacity-90 transition-all text-sm inline-flex items-center gap-2"
               >
                 Open in Telegram →
               </a>
@@ -123,7 +123,7 @@ export default function ChannelPage() {
 
               <p className="text-txt-dim text-xs text-center">
                 Waiting for connection...
-                <span className="inline-block w-2 h-2 bg-guardian rounded-full ml-2 animate-pulse" />
+                <span className="inline-block w-2 h-2 bg-accent rounded-full ml-2 animate-pulse" />
               </p>
             </div>
           </div>

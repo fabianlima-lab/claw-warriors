@@ -56,7 +56,7 @@ function SignupForm() {
           ⚔️ CLAWWARRIORS
         </Link>
         <div className="flex justify-center gap-1 mt-6">
-          <Link href="/signup" className="px-4 py-2 text-sm font-medium text-txt border-b-2 border-guardian">
+          <Link href="/signup" className="px-4 py-2 text-sm font-medium text-txt border-b-2 border-accent">
             Sign Up
           </Link>
           <Link href="/login" className="px-4 py-2 text-sm font-medium text-txt-muted border-b-2 border-transparent hover:text-txt">

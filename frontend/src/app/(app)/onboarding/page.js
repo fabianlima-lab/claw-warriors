@@ -33,7 +33,7 @@ export default function OnboardingPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
       <div className="text-center mb-10">
-        <SectionLabel warriorClass="guardian">Step 1 of 4</SectionLabel>
+        <SectionLabel>Step 1 of 4</SectionLabel>
         <h1 className="font-[family-name:var(--font-display)] text-3xl text-txt mt-3">
           What Do You Need Help With?
         </h1>
@@ -50,7 +50,7 @@ export default function OnboardingPage() {
               key={goal.id}
               className={`p-5 cursor-pointer transition-all duration-200 ${
                 active
-                  ? 'ring-2 ring-guardian border-transparent'
+                  ? 'ring-2 ring-accent border-transparent'
                   : 'hover:border-elevated'
               }`}
               onClick={() => toggle(goal.id)}
@@ -59,7 +59,7 @@ export default function OnboardingPage() {
                 <span className="text-2xl">{goal.icon}</span>
                 <span className="text-txt font-medium">{goal.label}</span>
                 {active && (
-                  <span className="ml-auto text-guardian text-lg">✓</span>
+                  <span className="ml-auto text-accent text-lg">✓</span>
                 )}
               </div>
             </Card>

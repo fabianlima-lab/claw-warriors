@@ -1,7 +1,7 @@
 'use client';
 
 const variants = {
-  primary: 'bg-guardian text-bg hover:brightness-110',
+  primary: 'bg-accent text-white hover:opacity-90',
   ghost: 'bg-transparent border border-border text-txt-body hover:bg-elevated',
   danger: 'bg-danger text-white hover:brightness-110',
   guardian: 'bg-guardian text-bg hover:brightness-110',

@@ -75,7 +75,7 @@ export default function ChatWidget({
             <div
               className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm ${
                 msg.role === 'user'
-                  ? 'bg-guardian text-bg rounded-br-sm'
+                  ? 'bg-accent text-white rounded-br-sm'
                   : 'bg-elevated text-txt-body rounded-bl-sm'
               }`}
             >
@@ -101,7 +101,7 @@ export default function ChatWidget({
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           placeholder="Type a message..."
-          className="flex-1 bg-elevated border border-border rounded-[var(--radius-btn)] px-4 py-2.5 text-sm text-txt placeholder:text-txt-dim focus:outline-none focus:border-guardian transition-colors"
+          className="flex-1 bg-elevated border border-border rounded-[var(--radius-btn)] px-4 py-2.5 text-sm text-txt placeholder:text-txt-dim focus:outline-none focus:border-accent transition-colors"
         />
         <Button onClick={handleSend} disabled={!input.trim() || sending} className="px-4 py-2.5">
           Send

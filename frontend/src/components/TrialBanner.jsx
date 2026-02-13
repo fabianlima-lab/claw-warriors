@@ -24,13 +24,13 @@ export default function TrialBanner({ trialEndsAt }) {
   }
 
   return (
-    <div className="bg-guardian/10 border border-guardian/30 rounded-[var(--radius-btn)] px-4 py-2.5 flex items-center justify-between">
+    <div className="bg-accent-glow border border-[rgba(232,99,43,0.3)] rounded-[var(--radius-btn)] px-4 py-2.5 flex items-center justify-between">
       <span className="text-sm text-txt-body">
         Free Trial &middot; <strong className="text-txt">{daysLeft} day{daysLeft !== 1 ? 's' : ''} left</strong>
       </span>
       <Link
         href="/upgrade"
-        className="text-sm font-medium text-guardian hover:underline"
+        className="text-sm font-medium text-accent hover:underline"
       >
         Upgrade
       </Link>

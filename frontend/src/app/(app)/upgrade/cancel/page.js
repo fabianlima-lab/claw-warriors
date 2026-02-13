@@ -21,7 +21,7 @@ export default function UpgradeCancelPage() {
         </Button>
         <Link
           href="/upgrade"
-          className="text-sm text-guardian hover:underline"
+          className="text-sm text-accent hover:underline"
         >
           Compare Plans
         </Link>

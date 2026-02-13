@@ -21,7 +21,7 @@ export default function DemoPage() {
       <PublicNav />
       <main className="pt-16 max-w-2xl mx-auto px-6 py-12">
         <div className="text-center mb-8">
-          <span className="text-xs uppercase tracking-widest text-bard font-medium">Live Demo</span>
+          <span className="text-xs uppercase tracking-widest text-accent font-medium">Live Demo</span>
           <h1 className="font-[family-name:var(--font-display)] text-3xl text-txt mt-3">
             Chat with Luna
           </h1>
@@ -45,7 +45,7 @@ export default function DemoPage() {
         <div className="text-center mt-8">
           <Link
             href="/signup"
-            className="bg-bard text-bg px-8 py-4 rounded-[var(--radius-btn)] font-medium hover:brightness-110 transition-all inline-block"
+            className="bg-accent text-white px-8 py-4 rounded-[var(--radius-btn)] font-bold hover:opacity-90 transition-all inline-block"
           >
             Like Luna? Start Your Free Trial →
           </Link>

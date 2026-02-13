@@ -7,7 +7,7 @@ export default function NotFound() {
       <p className="text-txt-muted text-lg">This warrior has wandered off the map.</p>
       <Link
         href="/"
-        className="bg-guardian text-bg px-6 py-3 rounded-[var(--radius-btn)] text-sm font-medium hover:brightness-110 transition-all"
+        className="bg-accent text-white px-6 py-3 rounded-[var(--radius-btn)] text-sm font-medium hover:opacity-90 transition-all"
       >
         Return Home
       </Link>

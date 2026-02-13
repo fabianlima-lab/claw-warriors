@@ -11,7 +11,7 @@ export default function Input({ label, id, className = '', ...props }) {
       )}
       <input
         id={id}
-        className={`bg-elevated border border-border rounded-[var(--radius-btn)] px-4 py-3 text-txt text-sm placeholder:text-txt-dim focus:outline-none focus:border-guardian transition-colors ${className}`}
+        className={`bg-elevated border border-border rounded-[var(--radius-btn)] px-4 py-3 text-txt text-sm placeholder:text-txt-dim focus:outline-none focus:border-accent transition-colors ${className}`}
         {...props}
       />
     </div>

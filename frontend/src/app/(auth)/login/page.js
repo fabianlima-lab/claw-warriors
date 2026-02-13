@@ -48,7 +48,7 @@ export default function LoginPage() {
           <Link href="/signup" className="px-4 py-2 text-sm font-medium text-txt-muted border-b-2 border-transparent hover:text-txt">
             Sign Up
           </Link>
-          <Link href="/login" className="px-4 py-2 text-sm font-medium text-txt border-b-2 border-guardian">
+          <Link href="/login" className="px-4 py-2 text-sm font-medium text-txt border-b-2 border-accent">
             Sign In
           </Link>
         </div>

@@ -87,7 +87,7 @@ export default function PrivacyPage() {
             <h2 className="text-lg text-txt font-medium mb-3">7. Contact Us</h2>
             <p>
               If you have questions about this privacy policy or your data, contact us at{' '}
-              <a href="mailto:privacy@clawwarriors.com" className="text-guardian hover:underline">
+              <a href="mailto:privacy@clawwarriors.com" className="text-accent hover:underline">
                 privacy@clawwarriors.com
               </a>
             </p>
@@ -101,7 +101,7 @@ export default function PrivacyPage() {
         </div>
 
         <div className="mt-12">
-          <Link href="/" className="text-sm text-guardian hover:underline">
+          <Link href="/" className="text-sm text-accent hover:underline">
             ← Back to Home
           </Link>
         </div>

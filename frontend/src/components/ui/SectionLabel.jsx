@@ -1,7 +1,7 @@
 import { CLASS_HEX } from '@/lib/constants';
 
 export default function SectionLabel({ children, warriorClass, className = '' }) {
-  const color = warriorClass ? CLASS_HEX[warriorClass] : '#4A9EFF';
+  const color = warriorClass ? CLASS_HEX[warriorClass] : '#e8632b';
   return (
     <span
       className={`text-xs uppercase tracking-widest font-medium ${className}`}

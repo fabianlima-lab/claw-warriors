@@ -2,18 +2,23 @@
 
 @theme inline {
   /* Background & Surfaces */
-  --color-bg: #08090E;
-  --color-card: #12141F;
-  --color-card-end: #0D0F18;
-  --color-border: #1E2035;
-  --color-elevated: #1A1D2B;
+  --color-bg: #0a0a0f;
+  --color-card: #12121a;
+  --color-card-end: #0e0e16;
+  --color-card-hover: #1a1a25;
+  --color-border: #1e1e2a;
+  --color-elevated: #1a1d2b;
 
   /* Text */
-  --color-txt: #F0F1F5;
-  --color-txt-body: #C0C3D1;
-  --color-txt-muted: #8B8FA3;
-  --color-txt-dim: #6B6F83;
-  --color-txt-faint: #3A3D50;
+  --color-txt: #e8e4df;
+  --color-txt-body: #c0bdb6;
+  --color-txt-muted: #8a8690;
+  --color-txt-dim: #5a5660;
+  --color-txt-faint: #3a3d50;
+
+  /* Brand Accent */
+  --color-accent: #e8632b;
+  --color-accent-glow: rgba(232, 99, 43, 0.15);
 
   /* Class Colors */
   --color-guardian: #4A9EFF;
@@ -24,15 +29,16 @@
 
   /* Semantic */
   --color-danger: #FF4D6A;
-  --color-success: #47FFB3;
+  --color-success: #34d399;
 
   /* Fonts */
   --font-display: 'Cinzel', Georgia, serif;
   --font-body: 'DM Sans', -apple-system, sans-serif;
+  --font-mono: 'DM Mono', monospace;
 
   /* Radius */
   --radius-card: 16px;
-  --radius-btn: 12px;
+  --radius-btn: 10px;
 }
 
 body {
@@ -42,7 +48,7 @@ body {
 }
 
 ::selection {
-  background: #4A9EFF40;
+  background: rgba(232, 99, 43, 0.3);
 }
 
 /* Scrollbar styling */
@@ -55,4 +61,14 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--color-border);
   border-radius: 3px;
+}
+
+/* Animations */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
 }

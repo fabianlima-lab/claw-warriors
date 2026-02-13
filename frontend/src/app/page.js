@@ -1,10 +1,11 @@
 import { PublicNav } from '@/components/Nav';
 import PageShell from '@/components/ui/PageShell';
 import HeroSection from '@/components/landing/HeroSection';
-import WarriorShowcase from '@/components/landing/WarriorShowcase';
-import AgentValueProps from '@/components/landing/AgentValueProps';
+import ChatDemo from '@/components/landing/ChatDemo';
 import AppIntegrations from '@/components/landing/AppIntegrations';
+import AgentValueProps from '@/components/landing/AgentValueProps';
 import HowItWorks from '@/components/landing/HowItWorks';
+import Testimonials from '@/components/landing/Testimonials';
 import ComparisonBar from '@/components/landing/ComparisonBar';
 import PricingSection from '@/components/landing/PricingSection';
 import Footer from '@/components/landing/Footer';
@@ -15,10 +16,11 @@ export default function Home() {
       <PublicNav />
       <main className="pt-16">
         <HeroSection />
-        <WarriorShowcase />
-        <AgentValueProps />
+        <ChatDemo />
         <AppIntegrations />
+        <AgentValueProps />
         <HowItWorks />
+        <Testimonials />
         <ComparisonBar />
         <PricingSection />
       </main>

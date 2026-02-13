@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Card from '@/components/ui/Card';
 
 const PLANS = [
   {
@@ -16,7 +15,7 @@ const PLANS = [
     price: '$39',
     period: '/mo',
     badge: 'Most Popular',
-    features: ['1 warrior', 'Telegram (WhatsApp coming soon)', 'Unlimited messages', 'Web search', 'Custom name & tone', 'Persistent memory'],
+    features: ['1 warrior', 'Telegram + WhatsApp (soon)', 'Unlimited messages', 'Web search', 'Custom name & tone', 'Persistent memory'],
     cta: 'Choose Pro',
     href: '/signup?plan=pro',
     highlight: true,
@@ -25,7 +24,7 @@ const PLANS = [
     name: 'Pro Tribe',
     price: '$59',
     period: '/mo',
-    features: ['3 warriors (separate bots)', 'Telegram (WhatsApp coming soon)', 'Unlimited messages', 'Web search', 'Custom name & tone', 'Priority support'],
+    features: ['3 warriors', 'Telegram + WhatsApp (soon)', 'Unlimited messages', 'Web search', 'Custom name & tone', 'Priority support'],
     cta: 'Choose Pro Tribe',
     href: '/signup?plan=pro_tribe',
     highlight: false,
@@ -34,51 +33,58 @@ const PLANS = [
 
 export default function PricingSection() {
   return (
-    <section id="pricing" className="max-w-6xl mx-auto px-6 py-20">
-      <div className="text-center mb-12">
-        <span className="text-xs uppercase tracking-widest text-rogue font-medium">Pricing</span>
-        <h2 className="font-[family-name:var(--font-display)] text-3xl md:text-4xl text-txt mt-3">
-          Simple, Flat Pricing
-        </h2>
-        <p className="text-txt-muted mt-3">No surprise bills. No token tracking. No hidden fees.</p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <section id="pricing" className="py-20 px-6 text-center">
+      <span className="text-xs font-semibold text-accent tracking-[2px] uppercase">
+        PRICING
+      </span>
+      <h2 className="font-[family-name:var(--font-display)] text-[clamp(32px,4vw,48px)] font-bold text-txt mt-3 mb-2">
+        Simple, Flat Pricing
+      </h2>
+      <p className="text-[17px] text-txt-muted mb-12">
+        No surprise bills. No token tracking. No hidden fees.
+      </p>
+
+      <div className="flex gap-5 justify-center flex-wrap max-w-[860px] mx-auto">
         {PLANS.map((plan) => (
-          <Card
+          <div
             key={plan.name}
-            className={`p-8 flex flex-col ${plan.highlight ? 'ring-2 ring-guardian border-transparent' : ''}`}
+            className="flex-1 min-w-[240px] max-w-[270px] rounded-[var(--radius-card)] p-8 text-left relative"
+            style={{
+              background: plan.highlight ? 'rgba(232,99,43,0.08)' : 'var(--color-card)',
+              border: plan.highlight ? '1px solid rgba(232,99,43,0.3)' : '1px solid var(--color-border)',
+            }}
           >
-            <div className="flex items-center gap-2">
-              <h3 className="font-[family-name:var(--font-display)] text-xl text-txt">{plan.name}</h3>
-              {plan.badge && (
-                <span className="text-[10px] uppercase tracking-wider bg-guardian/20 text-guardian px-2 py-0.5 rounded-full font-medium">
-                  {plan.badge}
-                </span>
-              )}
+            {plan.badge && (
+              <div
+                className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-accent rounded-full px-3.5 py-0.5 text-xs font-bold text-white"
+              >
+                {plan.badge}
+              </div>
+            )}
+
+            <h3 className="text-xl font-bold text-txt mb-1">{plan.name}</h3>
+            <div className="flex items-baseline gap-1 mb-5">
+              <span className="font-[family-name:var(--font-display)] text-4xl font-extrabold text-txt">{plan.price}</span>
+              <span className="text-[15px] text-txt-muted">{plan.period}</span>
             </div>
-            <div className="mt-4">
-              <span className="text-4xl font-bold text-txt">{plan.price}</span>
-              <span className="text-txt-muted text-sm">{plan.period}</span>
-            </div>
-            <ul className="mt-6 space-y-3 flex-1">
-              {plan.features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-txt-body">
-                  <span className="text-success mt-0.5">✓</span>
-                  {f}
-                </li>
-              ))}
-            </ul>
+
+            {plan.features.map((f) => (
+              <div key={f} className="flex items-center gap-2 py-1.5 text-[15px] text-txt-muted">
+                <span className="text-success text-xs">&#10003;</span> {f}
+              </div>
+            ))}
+
             <Link
               href={plan.href}
-              className={`mt-8 block text-center py-3 rounded-[var(--radius-btn)] font-medium text-sm transition-all ${
+              className={`block w-full text-center mt-5 py-2.5 rounded-[var(--radius-btn)] text-[15px] font-semibold transition-all ${
                 plan.highlight
-                  ? 'bg-guardian text-bg hover:brightness-110'
-                  : 'border border-border text-txt-body hover:bg-elevated'
+                  ? 'bg-accent text-white hover:opacity-90'
+                  : 'border border-border text-txt-muted hover:bg-elevated'
               }`}
             >
               {plan.cta}
             </Link>
-          </Card>
+          </div>
         ))}
       </div>
     </section>

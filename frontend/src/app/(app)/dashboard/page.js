@@ -140,7 +140,7 @@ export default function DashboardPage() {
           {/* Add warrior slot (Pro Tribe only) */}
           {isProTribe && warriors.length < maxWarriors && (
             <Card
-              className="p-6 border-dashed cursor-pointer hover:border-guardian transition-colors"
+              className="p-6 border-dashed cursor-pointer hover:border-accent transition-colors"
               onClick={() => router.push('/warriors')}
             >
               <div className="flex flex-col items-center justify-center h-full gap-3 text-txt-muted">
@@ -164,7 +164,7 @@ export default function DashboardPage() {
               {messages.map((msg) => (
                 <div key={msg.id} className="flex items-start gap-3">
                   <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
-                    msg.direction === 'in' ? 'bg-guardian' : 'bg-bard'
+                    msg.direction === 'in' ? 'bg-accent' : 'bg-bard'
                   }`} />
                   <div className="min-w-0">
                     <p className="text-sm text-txt-body truncate">{msg.content}</p>
@@ -192,12 +192,12 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-success" />
               <span className="text-sm text-txt-body">Web Search</span>
-              <span className="text-xs text-guardian ml-auto">Built-in</span>
+              <span className="text-xs text-accent ml-auto">Built-in</span>
             </div>
           </div>
           <Link
             href="/dashboard/skills"
-            className="text-sm text-guardian hover:underline mt-4 inline-block"
+            className="text-sm text-accent hover:underline mt-4 inline-block"
           >
             Manage →
           </Link>

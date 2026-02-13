@@ -1,25 +1,33 @@
 const STEPS = [
-  { num: '01', title: 'Tell Your Goals', desc: 'What do you need help with? Productivity, learning, content, coding, or trading.' },
-  { num: '02', title: 'Choose Your Warrior', desc: 'Browse 15 warriors across 5 classes. Each has a unique personality and skill set.' },
-  { num: '03', title: 'Connect Telegram', desc: 'Link your Telegram account in one tap. Your warrior goes live instantly.' },
-  { num: '04', title: 'Start Chatting', desc: 'Message your warrior anytime. They remember context and get smarter over time.' },
+  { num: '1', title: 'Pick Your Warrior', desc: 'Choose a personality that fits your vibe — work mode, creative, no-nonsense, or chill.' },
+  { num: '2', title: 'Connect Telegram', desc: 'One tap. Your warrior goes live in your favorite messaging app instantly.' },
+  { num: '3', title: 'Just Ask', desc: 'Text your warrior like a friend. It handles the rest — emails, calendar, research, anything.' },
 ];
 
 export default function HowItWorks() {
   return (
-    <section className="max-w-6xl mx-auto px-6 py-20">
-      <div className="text-center mb-12">
-        <span className="text-xs uppercase tracking-widest text-bard font-medium">Getting Started</span>
-        <h2 className="font-[family-name:var(--font-display)] text-3xl md:text-4xl text-txt mt-3">
-          Live in 5 Minutes
-        </h2>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        {STEPS.map((step) => (
-          <div key={step.num} className="text-center">
-            <span className="text-4xl font-bold text-border font-[family-name:var(--font-display)]">{step.num}</span>
-            <h3 className="text-txt font-medium mt-3">{step.title}</h3>
-            <p className="text-txt-muted text-sm mt-2">{step.desc}</p>
+    <section id="how" className="py-20 px-6 text-center">
+      <span className="text-xs font-semibold text-accent tracking-[2px] uppercase">
+        GETTING STARTED
+      </span>
+      <h2 className="font-[family-name:var(--font-display)] text-[clamp(32px,4vw,48px)] font-bold text-txt mt-3 mb-12 leading-tight">
+        Live in 3 Minutes. Seriously.
+      </h2>
+
+      <div className="flex justify-center gap-6 flex-wrap max-w-[900px] mx-auto">
+        {STEPS.map((s) => (
+          <div
+            key={s.num}
+            className="flex-1 min-w-[250px] max-w-[280px] bg-card border border-border rounded-[var(--radius-card)] p-8 text-left relative"
+          >
+            <div
+              className="font-[family-name:var(--font-display)] text-5xl font-extrabold absolute top-4 right-5"
+              style={{ color: 'rgba(232,99,43,0.12)' }}
+            >
+              {s.num}
+            </div>
+            <h3 className="text-xl font-bold text-txt mb-2">{s.title}</h3>
+            <p className="text-base text-txt-muted leading-relaxed">{s.desc}</p>
           </div>
         ))}
       </div>
