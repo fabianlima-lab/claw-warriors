@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#0a0a0f"/>
+  <g fill="#e8632b">
+    <!-- Three claw slash marks -->
+    <path d="M8 6 C8 6, 6 16, 10 26" stroke="#e8632b" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+    <path d="M16 4 C16 4, 14 14, 16 28" stroke="#e8632b" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+    <path d="M24 6 C24 6, 26 16, 22 26" stroke="#e8632b" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>

@@ -5,18 +5,18 @@ import { useState } from 'react';
 /* eslint-disable @next/next/no-img-element */
 
 const APPS_MAP = {
-  gmail: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Gmail_icon_%282020%29.svg/512px-Gmail_icon_%282020%29.svg.png',
-  slack: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Slack_icon_2019.svg/512px-Slack_icon_2019.svg.png',
-  gcal: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/512px-Google_Calendar_icon_%282020%29.svg.png',
-  notion: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Notion-logo.svg/512px-Notion-logo.svg.png',
-  canva: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Canva_icon_2021.svg/512px-Canva_icon_2021.svg.png',
-  sheets: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Google_Sheets_logo_%282014-2020%29.svg/512px-Google_Sheets_logo_%282014-2020%29.svg.png',
-  instagram: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/512px-Instagram_logo_2016.svg.png',
+  gmail: 'https://cdn.simpleicons.org/gmail',
+  slack: 'https://cdn.simpleicons.org/slack/4A154B',
+  gcal: 'https://cdn.simpleicons.org/googlecalendar',
+  notion: 'https://cdn.simpleicons.org/notion/white',
+  canva: 'https://cdn.simpleicons.org/canva',
+  sheets: 'https://cdn.simpleicons.org/googlesheets/34A853',
+  instagram: 'https://cdn.simpleicons.org/instagram/E4405F',
   x: 'https://cdn.simpleicons.org/x/white',
-  youtube: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png',
-  gdrive: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Google_Drive_icon_%282020%29.svg/512px-Google_Drive_icon_%282020%29.svg.png',
-  spotify: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/512px-Spotify_icon.svg.png',
-  notes: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Notes_%28iOS%29.svg/512px-Notes_%28iOS%29.svg.png',
+  youtube: 'https://cdn.simpleicons.org/youtube/FF0000',
+  gdrive: 'https://cdn.simpleicons.org/googledrive',
+  spotify: 'https://cdn.simpleicons.org/spotify/1DB954',
+  notes: 'https://cdn.simpleicons.org/apple/white',
 };
 
 const USE_CASES = [

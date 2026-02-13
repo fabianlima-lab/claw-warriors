@@ -21,7 +21,9 @@ export const metadata = {
     "Deploy personalized AI agents to Telegram and WhatsApp. Pick a warrior, connect your channel, start chatting — all in under 5 minutes.",
   manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
     apple: "/icon-192.png",
   },
 };
