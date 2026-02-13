@@ -13,7 +13,7 @@ export default function Footer() {
             <a href="#warriors" className="hover:text-txt transition-colors">Warriors</a>
             <a href="#pricing" className="hover:text-txt transition-colors">Pricing</a>
             <Link href="/demo" className="hover:text-txt transition-colors">Demo</Link>
-            <Link href="/login" className="hover:text-txt transition-colors">Log In</Link>
+            <Link href="/login" className="hover:text-txt transition-colors">Sign In</Link>
             <Link href="/signup" className="hover:text-txt transition-colors">Sign Up</Link>
             <Link href="/privacy" className="hover:text-txt transition-colors">Privacy Policy</Link>
           </div>

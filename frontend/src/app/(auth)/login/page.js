@@ -7,8 +7,8 @@ import { GoogleLogin } from '@react-oauth/google';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
-import { apiPost, apiFetch } from '@/lib/api';
-import { useGoogleAuth } from '@/lib/google-auth';
+import { apiPost } from '@/lib/api';
+import { useGoogleAuth, resolveDestination } from '@/lib/google-auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -26,16 +26,11 @@ export default function LoginPage() {
       const data = await apiPost('/auth/login', { email, password });
       localStorage.setItem('cw_token', data.token);
 
-      // Check if user has active warrior
-      const warriors = await apiFetch('/warriors/mine');
-      const list = warriors.warriors || warriors;
-      if (Array.isArray(list) && list.length > 0) {
-        router.push('/dashboard');
-      } else {
-        router.push('/onboarding');
-      }
+      // Smart routing — pick up where the user left off
+      const dest = await resolveDestination();
+      router.push(dest);
     } catch (err) {
-      setError(err.message || 'Login failed');
+      setError(err.message || 'Sign in failed');
     } finally {
       setLoading(false);
     }
@@ -54,7 +49,7 @@ export default function LoginPage() {
             Sign Up
           </Link>
           <Link href="/login" className="px-4 py-2 text-sm font-medium text-txt border-b-2 border-guardian">
-            Log In
+            Sign In
           </Link>
         </div>
       </div>
@@ -107,7 +102,7 @@ export default function LoginPage() {
         />
         {displayError && <p className="text-danger text-sm">{displayError}</p>}
         <Button type="submit" loading={loading || googleLoading} className="w-full">
-          Log In
+          Sign In
         </Button>
       </form>
     </Card>

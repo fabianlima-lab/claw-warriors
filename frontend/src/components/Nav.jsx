@@ -16,7 +16,7 @@ export function PublicNav() {
           <Link href="/demo" className="text-sm text-txt-muted hover:text-txt transition-colors">Demo</Link>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/login" className="text-sm text-txt-muted hover:text-txt transition-colors">Log in</Link>
+          <Link href="/login" className="text-sm text-txt-muted hover:text-txt transition-colors">Sign in</Link>
           <Link
             href="/signup"
             className="bg-guardian text-bg px-4 py-2 rounded-[var(--radius-btn)] text-sm font-medium hover:brightness-110 transition-all"

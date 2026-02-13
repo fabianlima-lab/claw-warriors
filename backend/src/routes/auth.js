@@ -86,7 +86,7 @@ async function authRoutes(app) {
       }
 
       if (!user.passwordHash) {
-        return reply.code(401).send({ error: 'This account uses Google sign-in. Please use "Continue with Google" to log in.' });
+        return reply.code(401).send({ error: 'This account uses Google sign-in. Please use "Continue with Google" to sign in.' });
       }
 
       const valid = await bcrypt.compare(password, user.passwordHash);
