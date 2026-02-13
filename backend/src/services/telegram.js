@@ -81,3 +81,24 @@ export async function sendTypingAction(chatId) {
     // Typing indicator is non-critical, silently fail
   }
 }
+
+/**
+ * Start a continuous typing indicator that re-sends every 4 seconds.
+ * Telegram's typing action expires after ~5s, so this keeps it alive
+ * during long AI responses.
+ *
+ * @param {string} chatId - Telegram chat ID
+ * @returns {function} stop - Call this to stop the typing loop
+ */
+export function startTypingLoop(chatId) {
+  // Send immediately (fire-and-forget)
+  sendTypingAction(chatId);
+
+  // Re-send every 4 seconds
+  const interval = setInterval(() => {
+    sendTypingAction(chatId);
+  }, 4000);
+
+  // Return stop function
+  return () => clearInterval(interval);
+}

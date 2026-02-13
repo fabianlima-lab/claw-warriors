@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { isTrialExpired, getFeaturesByTier } from '../utils/helpers.js';
-import { sendTelegramMessage, sendTypingAction } from './telegram.js';
+import { sendTelegramMessage, startTypingLoop } from './telegram.js';
 import { sendWhatsAppMessage } from './whatsapp.js';
 import { callKimi, isAIConfigured } from './ai-client.js';
 
@@ -83,52 +83,61 @@ export async function routeIncomingMessage({ channel, channelId, text, senderNam
       return;
     }
 
-    // Show typing indicator (Telegram only)
+    // Start continuous typing indicator (Telegram only)
+    // This re-sends every 4s so users see "typing..." during the full AI call
+    let stopTyping = null;
     if (channel === 'telegram') {
-      await sendTypingAction(channelId);
+      stopTyping = startTypingLoop(channelId);
     }
 
-    // ── Step 4: CONTEXT — Save incoming + load history ──
-    await prisma.message.create({
-      data: {
-        userId: user.id,
-        warriorId: warrior.id,
-        direction: 'in',
-        channel,
-        content: cleanText,
-      },
-    });
+    try {
+      // ── Step 4: CONTEXT — Save incoming + load history (PARALLEL) ──
+      const [, recentMessages] = await Promise.all([
+        prisma.message.create({
+          data: {
+            userId: user.id,
+            warriorId: warrior.id,
+            direction: 'in',
+            channel,
+            content: cleanText,
+          },
+        }),
+        prisma.message.findMany({
+          where: { userId: user.id, warriorId: warrior.id },
+          orderBy: { createdAt: 'desc' },
+          take: 20,
+        }),
+      ]);
 
-    const recentMessages = await prisma.message.findMany({
-      where: { userId: user.id, warriorId: warrior.id },
-      orderBy: { createdAt: 'desc' },
-      take: 20,
-    });
+      // Reverse to chronological order for the AI
+      const conversationHistory = recentMessages.reverse().map((m) => ({
+        role: m.direction === 'in' ? 'user' : 'assistant',
+        content: m.content,
+      }));
 
-    // Reverse to chronological order for the AI
-    const conversationHistory = recentMessages.reverse().map((m) => ({
-      role: m.direction === 'in' ? 'user' : 'assistant',
-      content: m.content,
-    }));
+      // ── Step 5: CALL — Send to Kimi K2.5 ──
+      const features = getFeaturesByTier(user.tier);
+      const aiResponse = await generateAIResponse(warrior, conversationHistory, {
+        webSearch: features.web_search,
+      });
 
-    // ── Step 5: CALL — Send to Kimi K2.5 ──
-    const features = getFeaturesByTier(user.tier);
-    const aiResponse = await generateAIResponse(warrior, conversationHistory, {
-      webSearch: features.web_search,
-    });
-
-    // ── Step 6: RESPOND — Save + send ──
-    await prisma.message.create({
-      data: {
-        userId: user.id,
-        warriorId: warrior.id,
-        direction: 'out',
-        channel,
-        content: aiResponse,
-      },
-    });
-
-    await sendChannelReply(channel, channelId, aiResponse);
+      // ── Step 6: RESPOND — Save + send (PARALLEL) ──
+      await Promise.all([
+        prisma.message.create({
+          data: {
+            userId: user.id,
+            warriorId: warrior.id,
+            direction: 'out',
+            channel,
+            content: aiResponse,
+          },
+        }),
+        sendChannelReply(channel, channelId, aiResponse),
+      ]);
+    } finally {
+      // Always stop the typing loop
+      if (stopTyping) stopTyping();
+    }
 
   } catch (error) {
     console.error(`[ERROR] message routing failed: ${error.message}`);
@@ -140,22 +149,18 @@ export async function routeIncomingMessage({ channel, channelId, text, senderNam
 
 /**
  * Find a user by their channel type and channel ID.
- * Checks both primary (channel/channelId) and secondary (channel2/channel2Id) slots.
+ * Checks both primary (channel/channelId) and secondary (channel2/channel2Id) slots
+ * in a single OR query for speed.
  */
 async function findUserByChannel(channel, channelId) {
-  // Check primary channel slot
-  let user = await prisma.user.findFirst({
-    where: { channel, channelId },
+  return prisma.user.findFirst({
+    where: {
+      OR: [
+        { channel, channelId },
+        { channel2: channel, channel2Id: channelId },
+      ],
+    },
   });
-
-  if (user) return user;
-
-  // Check secondary channel slot
-  user = await prisma.user.findFirst({
-    where: { channel2: channel, channel2Id: channelId },
-  });
-
-  return user;
 }
 
 /**
