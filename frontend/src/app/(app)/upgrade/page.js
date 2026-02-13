@@ -13,7 +13,7 @@ const PLANS = [
     period: '/mo',
     features: [
       '1 warrior',
-      'Telegram + WhatsApp',
+      'Telegram (WhatsApp coming soon)',
       'Unlimited messages',
       'Web search',
       'Custom name & tone',

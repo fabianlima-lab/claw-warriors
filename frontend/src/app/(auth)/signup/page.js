@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { GoogleLogin } from '@react-oauth/google';
 import Card from '@/components/ui/Card';
@@ -11,11 +11,21 @@ import { apiPost } from '@/lib/api';
 import { useGoogleAuth } from '@/lib/google-auth';
 
 export default function SignupPage() {
+  return (
+    <Suspense>
+      <SignupForm />
+    </Suspense>
+  );
+}
+
+function SignupForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const plan = searchParams.get('plan');
   const { handleCredentialResponse, loading: googleLoading, error: googleError } = useGoogleAuth();
 
   const handleSubmit = async (e) => {
@@ -25,6 +35,10 @@ export default function SignupPage() {
     try {
       const data = await apiPost('/auth/signup', { email, password });
       localStorage.setItem('cw_token', data.token);
+      // If user clicked a paid plan CTA, store it for post-onboarding checkout
+      if (plan === 'pro' || plan === 'pro_tribe') {
+        localStorage.setItem('cw_selected_plan', plan);
+      }
       router.push('/onboarding');
     } catch (err) {
       setError(err.message || 'Signup failed');

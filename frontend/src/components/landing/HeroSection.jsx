@@ -66,7 +66,7 @@ export default function HeroSection() {
           </span>
         </h1>
         <p className="mt-6 text-lg text-txt-body max-w-2xl mx-auto">
-          Deploy personalized AI agents to Telegram and WhatsApp.
+          Deploy personalized AI agents to Telegram.
           Pick a warrior, connect your channel, start chatting — all in under 5 minutes.
         </p>
       </div>
@@ -77,7 +77,7 @@ export default function HeroSection() {
           <span className="w-2 h-2 rounded-full bg-guardian" />15 Warriors
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-bard" />1 Channel
+          <span className="w-2 h-2 rounded-full bg-bard" />Telegram Ready
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-rogue" />$0 API Keys
