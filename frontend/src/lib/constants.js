@@ -1,0 +1,92 @@
+export const CLASS_COLORS = {
+  guardian: 'guardian',
+  scholar: 'scholar',
+  bard: 'bard',
+  artificer: 'artificer',
+  rogue: 'rogue',
+};
+
+export const CLASS_HEX = {
+  guardian: '#4A9EFF',
+  scholar: '#B47AFF',
+  bard: '#FFB347',
+  artificer: '#FF7847',
+  rogue: '#47FFB3',
+};
+
+export const CLASS_ICONS = {
+  guardian: '🛡️',
+  scholar: '📚',
+  bard: '🎭',
+  artificer: '⚒️',
+  rogue: '🗡️',
+};
+
+export const CLASS_STAT_NAMES = {
+  guardian: ['Protection', 'Precision', 'Loyalty'],
+  scholar: ['Wisdom', 'Patience', 'Clarity'],
+  bard: ['Creativity', 'Strategy', 'Momentum'],
+  artificer: ['Precision', 'Speed', 'Depth'],
+  rogue: ['Analysis', 'Speed', 'Instinct'],
+};
+
+export const CLASS_STAT_KEYS = {
+  guardian: ['protection', 'precision', 'loyalty'],
+  scholar: ['wisdom', 'patience', 'clarity'],
+  bard: ['creativity', 'strategy', 'momentum'],
+  artificer: ['precision', 'speed', 'depth'],
+  rogue: ['analysis', 'speed', 'instinct'],
+};
+
+export const CLASS_LABELS = {
+  guardian: 'Guardian',
+  scholar: 'Scholar',
+  bard: 'Bard',
+  artificer: 'Artificer',
+  rogue: 'Rogue',
+};
+
+export const CLASS_DESCRIPTIONS = {
+  guardian: 'Protectors & Assistants',
+  scholar: 'Learners & Tutors',
+  bard: 'Content Creators',
+  artificer: 'Developers & Builders',
+  rogue: 'Traders & Analysts',
+};
+
+export const TIER_FEATURES = {
+  trial: {
+    label: 'Free Trial',
+    maxWarriors: 1,
+    channels: 1,
+    customName: false,
+    customTone: false,
+  },
+  pro: {
+    label: 'Pro',
+    price: '$39/mo',
+    maxWarriors: 1,
+    channels: 2,
+    customName: true,
+    customTone: true,
+  },
+  pro_tribe: {
+    label: 'Pro Tribe',
+    price: '$59/mo',
+    maxWarriors: 3,
+    channels: 2,
+    customName: true,
+    customTone: true,
+  },
+};
+
+export const GOAL_OPTIONS = [
+  { id: 'productivity', label: 'Productivity & Organization', icon: '⚔️', class: 'guardian' },
+  { id: 'learning', label: 'Learning & Research', icon: '📚', class: 'scholar' },
+  { id: 'content', label: 'Content Creation', icon: '🎭', class: 'bard' },
+  { id: 'coding', label: 'Coding & Building', icon: '🔨', class: 'artificer' },
+  { id: 'trading', label: 'Trading & Analysis', icon: '🗡️', class: 'rogue' },
+  { id: 'general', label: 'General Assistant', icon: '✨', class: 'guardian' },
+];
+
+export const CLASSES = ['guardian', 'scholar', 'bard', 'artificer', 'rogue'];

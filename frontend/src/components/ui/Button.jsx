@@ -1,0 +1,38 @@
+'use client';
+
+const variants = {
+  primary: 'bg-guardian text-bg hover:brightness-110',
+  ghost: 'bg-transparent border border-border text-txt-body hover:bg-elevated',
+  danger: 'bg-danger text-white hover:brightness-110',
+  guardian: 'bg-guardian text-bg hover:brightness-110',
+  scholar: 'bg-scholar text-bg hover:brightness-110',
+  bard: 'bg-bard text-bg hover:brightness-110',
+  artificer: 'bg-artificer text-bg hover:brightness-110',
+  rogue: 'bg-rogue text-bg hover:brightness-110',
+};
+
+export default function Button({
+  children,
+  variant = 'primary',
+  loading = false,
+  className = '',
+  disabled,
+  ...props
+}) {
+  return (
+    <button
+      className={`px-6 py-3 rounded-[var(--radius-btn)] font-medium text-sm transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant] || variants.primary} ${className}`}
+      disabled={disabled || loading}
+      {...props}
+    >
+      {loading ? (
+        <span className="flex items-center gap-2">
+          <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          Loading...
+        </span>
+      ) : (
+        children
+      )}
+    </button>
+  );
+}
