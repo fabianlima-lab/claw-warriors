@@ -11,6 +11,7 @@ const mockPrisma = {
     updateMany: vi.fn(),
     count: vi.fn(),
     delete: vi.fn(),
+    groupBy: vi.fn(),
   },
   warrior: {
     findUnique: vi.fn(),
@@ -21,6 +22,7 @@ const mockPrisma = {
     updateMany: vi.fn(),
     count: vi.fn(),
     delete: vi.fn(),
+    groupBy: vi.fn(),
   },
   warriorTemplate: {
     findUnique: vi.fn(),
@@ -32,9 +34,11 @@ const mockPrisma = {
     create: vi.fn(),
     deleteMany: vi.fn(),
     count: vi.fn(),
+    groupBy: vi.fn(),
   },
   $connect: vi.fn(),
   $disconnect: vi.fn(),
+  $queryRaw: vi.fn(),
 };
 
 vi.mock('@prisma/client', () => {

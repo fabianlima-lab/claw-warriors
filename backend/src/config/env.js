@@ -42,6 +42,9 @@ const env = {
   MODEL_ROUTING_ENABLED: process.env.MODEL_ROUTING_ENABLED !== 'false', // default: true
   LOG_ROUTING_DECISIONS: process.env.LOG_ROUTING_DECISIONS !== 'false', // default: true
 
+  // Admin
+  ADMIN_EMAILS: (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean),
+
   // App
   APP_URL: process.env.APP_URL || 'http://localhost:3000',
   NODE_ENV: process.env.NODE_ENV || 'development',

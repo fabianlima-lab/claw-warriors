@@ -4,6 +4,9 @@ process.env.JWT_SECRET = 'test-secret-key-for-vitest';
 process.env.NODE_ENV = 'test';
 process.env.APP_URL = 'http://localhost:3000';
 
+// Admin
+process.env.ADMIN_EMAILS = 'admin@test.com';
+
 // Override credentials so real services are never called
 process.env.STRIPE_SECRET_KEY = '';
 process.env.STRIPE_WEBHOOK_SECRET = '';
