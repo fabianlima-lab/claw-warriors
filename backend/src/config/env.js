@@ -37,8 +37,10 @@ const env = {
   // Google OAuth
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
 
-  // AI Models (Kimi K2.5 via NVIDIA)
+  // AI Models (3-tier routing via NVIDIA NIMs)
   NVIDIA_API_KEY: process.env.NVIDIA_API_KEY,
+  MODEL_ROUTING_ENABLED: process.env.MODEL_ROUTING_ENABLED !== 'false', // default: true
+  LOG_ROUTING_DECISIONS: process.env.LOG_ROUTING_DECISIONS !== 'false', // default: true
 
   // App
   APP_URL: process.env.APP_URL || 'http://localhost:3000',

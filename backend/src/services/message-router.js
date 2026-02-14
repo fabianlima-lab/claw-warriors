@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { isTrialExpired, getFeaturesByTier } from '../utils/helpers.js';
 import { sendTelegramMessage, startTypingLoop } from './telegram.js';
 import { sendWhatsAppMessage } from './whatsapp.js';
-import { callKimi, isAIConfigured } from './ai-client.js';
+import { callAI, isAIConfigured } from './ai-client.js';
 
 const prisma = new PrismaClient();
 
@@ -33,7 +33,7 @@ const ERROR_MESSAGES = {
  * 2. VALIDATE → Check tier (trial expiry)
  * 3. LOAD → Get active warrior config + system prompt
  * 4. CONTEXT → Load last 20 messages for conversation history
- * 5. CALL → Send to Kimi K2.5 via NVIDIA API
+ * 5. CALL → Send to AI via 3-tier intelligent routing
  * 6. RESPOND → Save message to DB, send response to channel
  *
  * @param {object} params
@@ -115,10 +115,11 @@ export async function routeIncomingMessage({ channel, channelId, text, senderNam
         content: m.content,
       }));
 
-      // ── Step 5: CALL — Send to Kimi K2.5 ──
+      // ── Step 5: CALL — Send to AI via 3-tier routing ──
       const features = getFeaturesByTier(user.tier);
       const aiResponse = await generateAIResponse(warrior, conversationHistory, {
         webSearch: features.web_search,
+        userMessage: cleanText,
       });
 
       // ── Step 6: RESPOND — Save + send (PARALLEL) ──
@@ -177,12 +178,12 @@ async function sendChannelReply(channel, channelId, text) {
 }
 
 /**
- * Generate AI response using Kimi K2.5 via NVIDIA NIMs.
+ * Generate AI response using 3-tier intelligent model routing.
  * Falls back to a friendly in-character message if AI is unavailable.
  *
  * @param {object} warrior - Warrior record with template included
  * @param {Array} conversationHistory - Formatted message array
- * @param {object} options - { webSearch: boolean }
+ * @param {object} options - { webSearch: boolean, userMessage: string }
  * @returns {string} Response text
  */
 async function generateAIResponse(warrior, conversationHistory, options = {}) {
@@ -194,18 +195,18 @@ async function generateAIResponse(warrior, conversationHistory, options = {}) {
     return ERROR_MESSAGES.ai_not_configured;
   }
 
-  const { content, error } = await callKimi(
+  const { content, error, tier, model, responseTimeMs } = await callAI(
     warrior.systemPrompt,
     conversationHistory,
-    { webSearch: options.webSearch },
+    { webSearch: options.webSearch, userMessage: options.userMessage },
   );
 
   if (error) {
-    console.error(`[ERROR] AI response error for warrior:${warrior.id} - ${error}`);
+    console.error(`[ERROR] AI response error for warrior:${warrior.id} - ${error} (tier:${tier} model:${model})`);
     return ERROR_MESSAGES[error] || ERROR_MESSAGES.unknown;
   }
 
-  console.log(`[MSG_OUT] AI response for warrior:${warrior.id} - len:${content.length}`);
+  console.log(`[MSG_OUT] warrior:${warrior.id} tier:${tier} model:${model} time:${responseTimeMs}ms len:${content.length}`);
   return content;
 }
 

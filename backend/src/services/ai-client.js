@@ -1,15 +1,13 @@
 import OpenAI from 'openai';
 import env from '../config/env.js';
+import { MODEL_TIERS, FALLBACK_CHAIN, NVIDIA_BASE_URL } from '../config/models.js';
+import { classifyQuery } from '../utils/query-analyzer.js';
 
 // ─────────────────────────────────────────────────────
-// Kimi K2.5 via NVIDIA NIMs (OpenAI-compatible API)
+// 3-Tier AI Client via NVIDIA NIMs (OpenAI-compatible)
 // ─────────────────────────────────────────────────────
 
-const MODEL = 'moonshotai/kimi-k2.5';
-const MAX_TOKENS = 2048;
-const TEMPERATURE = 0.7;
-const TIMEOUT_MS = 60000; // 60 second timeout
-
+/** Reusable OpenAI client (one per process) */
 let client = null;
 
 function getClient() {
@@ -18,48 +16,116 @@ function getClient() {
       return null;
     }
     client = new OpenAI({
-      baseURL: 'https://integrate.api.nvidia.com/v1',
+      baseURL: NVIDIA_BASE_URL,
       apiKey: env.NVIDIA_API_KEY,
-      timeout: TIMEOUT_MS,
+      timeout: 60000, // max timeout, per-request timeout handled below
     });
   }
   return client;
 }
 
 /**
- * Call Kimi K2.5 with system prompt and conversation history.
+ * Call the AI with intelligent tier routing.
  *
- * @param {string} systemPrompt - Compiled system prompt (preamble + persona + tone)
+ * Classifies the user's latest message, selects the right model tier,
+ * and falls back to the next tier on failure.
+ *
+ * @param {string} systemPrompt - Warrior system prompt
  * @param {Array<{role: string, content: string}>} conversationHistory - Recent messages
  * @param {object} options
- * @param {boolean} [options.webSearch=false] - Enable web search tool
- * @returns {Promise<{content: string, error: string|null}>}
+ * @param {boolean} [options.webSearch=false] - Enable web search tool (Tier 3 only)
+ * @param {string} [options.userMessage] - The latest user message (for routing). If omitted, uses last message in history.
+ * @returns {Promise<{content: string, error: string|null, tier: number, model: string, responseTimeMs: number}>}
  */
-export async function callKimi(systemPrompt, conversationHistory, options = {}) {
+export async function callAI(systemPrompt, conversationHistory, options = {}) {
   const ai = getClient();
 
   if (!ai) {
     console.error('[ERROR] AI client not configured — NVIDIA_API_KEY missing');
-    return {
-      content: null,
-      error: 'ai_not_configured',
-    };
+    return { content: null, error: 'ai_not_configured', tier: 0, model: null, responseTimeMs: 0 };
   }
 
+  // Determine which message to classify
+  const userMessage = options.userMessage
+    || conversationHistory.filter((m) => m.role === 'user').pop()?.content
+    || '';
+
+  const { tier, reason } = classifyQuery(userMessage);
+  console.log(`[ROUTING] tier:${tier} reason:"${reason}" msg:"${userMessage.slice(0, 60)}"`);
+
+  // Try the selected tier, then fall back through the chain
+  return callWithFallback(ai, tier, systemPrompt, conversationHistory, options);
+}
+
+/**
+ * Attempt to call the selected tier's model, falling back on failure.
+ */
+async function callWithFallback(ai, tier, systemPrompt, conversationHistory, options, attempt = 1) {
+  const tierConfig = MODEL_TIERS[tier];
+  if (!tierConfig) {
+    return { content: null, error: 'invalid_tier', tier, model: null, responseTimeMs: 0 };
+  }
+
+  const startTime = Date.now();
+
+  try {
+    const result = await callModel(ai, tierConfig, systemPrompt, conversationHistory, options);
+    const responseTimeMs = Date.now() - startTime;
+
+    if (result.error) {
+      console.error(`[ERROR] Tier ${tier} (${tierConfig.model}) failed: ${result.error}`);
+
+      // Try fallback
+      const nextTier = FALLBACK_CHAIN[tier];
+      if (nextTier && attempt <= 3) {
+        console.log(`[ROUTING] Falling back: tier ${tier} → tier ${nextTier}`);
+        return callWithFallback(ai, nextTier, systemPrompt, conversationHistory, options, attempt + 1);
+      }
+
+      return { ...result, tier, model: tierConfig.model, responseTimeMs };
+    }
+
+    console.log(`[ROUTING] ✓ tier:${tier} model:${tierConfig.model} time:${responseTimeMs}ms`);
+    return { ...result, tier, model: tierConfig.model, responseTimeMs };
+  } catch (error) {
+    const responseTimeMs = Date.now() - startTime;
+    const errorType = categorizeError(error);
+    console.error(`[ERROR] Tier ${tier} (${tierConfig.model}) exception: ${errorType} - ${error.message}`);
+
+    // Try fallback
+    const nextTier = FALLBACK_CHAIN[tier];
+    if (nextTier && attempt <= 3) {
+      console.log(`[ROUTING] Falling back: tier ${tier} → tier ${nextTier}`);
+      return callWithFallback(ai, nextTier, systemPrompt, conversationHistory, options, attempt + 1);
+    }
+
+    return { content: null, error: errorType, tier, model: tierConfig.model, responseTimeMs };
+  }
+}
+
+/**
+ * Call a specific model with the given tier configuration.
+ */
+async function callModel(ai, tierConfig, systemPrompt, conversationHistory, options = {}) {
   const messages = [
     { role: 'system', content: systemPrompt },
     ...conversationHistory,
   ];
 
   const requestParams = {
-    model: MODEL,
+    model: tierConfig.model,
     messages,
-    max_tokens: MAX_TOKENS,
-    temperature: TEMPERATURE,
+    max_tokens: tierConfig.maxTokens,
+    temperature: tierConfig.temperature,
   };
 
-  // Add web search tool if enabled
-  if (options.webSearch) {
+  // Kimi K2.5 instant mode (thinking: false)
+  if (tierConfig.extraBody) {
+    requestParams.extra_body = tierConfig.extraBody;
+  }
+
+  // Web search tool — only for Tier 3 (Kimi supports it)
+  if (options.webSearch && tierConfig.model === 'moonshotai/kimi-k2.5') {
     requestParams.tools = [
       {
         type: 'function',
@@ -78,63 +144,78 @@ export async function callKimi(systemPrompt, conversationHistory, options = {}) 
     ];
   }
 
-  try {
-    const response = await ai.chat.completions.create(requestParams);
+  const response = await ai.chat.completions.create(requestParams);
 
-    const choice = response.choices?.[0];
-    if (!choice || !choice.message) {
-      console.error('[ERROR] AI response: no choices returned');
-      return { content: null, error: 'empty_response' };
-    }
-
-    // Handle tool calls (web search) — auto-handle the search loop
-    if (choice.message.tool_calls && choice.message.tool_calls.length > 0) {
-      return await handleToolCalls(ai, messages, choice.message, requestParams);
-    }
-
-    const content = choice.message.content;
-    if (!content || content.trim().length === 0) {
-      console.error('[ERROR] AI response: empty content');
-      return { content: null, error: 'empty_content' };
-    }
-
-    return { content: content.trim(), error: null };
-  } catch (error) {
-    // Categorize errors for upstream handling
-    if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-      console.error(`[ERROR] AI timeout after ${TIMEOUT_MS}ms`);
-      return { content: null, error: 'timeout' };
-    }
-
-    if (error.status === 429) {
-      console.error('[ERROR] AI rate limited');
-      return { content: null, error: 'rate_limited' };
-    }
-
-    if (error.status === 401 || error.status === 403) {
-      console.error('[ERROR] AI auth failed — check NVIDIA_API_KEY');
-      return { content: null, error: 'auth_failed' };
-    }
-
-    if (error.status >= 500) {
-      console.error(`[ERROR] AI server error: ${error.status}`);
-      return { content: null, error: 'server_error' };
-    }
-
-    console.error(`[ERROR] AI call failed: ${error.message}`);
-    return { content: null, error: 'unknown' };
+  const choice = response.choices?.[0];
+  if (!choice || !choice.message) {
+    return { content: null, error: 'empty_response' };
   }
+
+  // Handle tool calls (web search) — auto-handle the search loop
+  if (choice.message.tool_calls && choice.message.tool_calls.length > 0) {
+    return handleToolCalls(ai, messages, choice.message, requestParams);
+  }
+
+  const content = choice.message.content;
+  if (!content || content.trim().length === 0) {
+    return { content: null, error: 'empty_content' };
+  }
+
+  return { content: content.trim(), error: null };
+}
+
+/**
+ * Stream a response from the AI for the demo/frontend endpoint.
+ *
+ * @param {string} systemPrompt
+ * @param {Array} conversationHistory
+ * @param {object} options
+ * @param {string} [options.userMessage] - For routing classification
+ * @returns {Promise<{stream: AsyncIterable, tier: number, model: string}>}
+ */
+export async function callAIStream(systemPrompt, conversationHistory, options = {}) {
+  const ai = getClient();
+
+  if (!ai) {
+    throw new Error('AI client not configured');
+  }
+
+  const userMessage = options.userMessage
+    || conversationHistory.filter((m) => m.role === 'user').pop()?.content
+    || '';
+
+  const { tier, reason } = classifyQuery(userMessage);
+  const tierConfig = MODEL_TIERS[tier];
+
+  console.log(`[ROUTING:STREAM] tier:${tier} reason:"${reason}" model:${tierConfig.model}`);
+
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...conversationHistory,
+  ];
+
+  const requestParams = {
+    model: tierConfig.model,
+    messages,
+    max_tokens: tierConfig.maxTokens,
+    temperature: tierConfig.temperature,
+    stream: true,
+  };
+
+  if (tierConfig.extraBody) {
+    requestParams.extra_body = tierConfig.extraBody;
+  }
+
+  const stream = await ai.chat.completions.create(requestParams);
+
+  return { stream, tier, model: tierConfig.model };
 }
 
 /**
  * Handle tool calls from the AI (e.g., web search).
- * Sends tool results back and gets the final response.
  */
 async function handleToolCalls(ai, originalMessages, assistantMessage, requestParams) {
   try {
-    // Build tool results (for now, we let the model handle search internally)
-    // NVIDIA NIMs may handle tool execution server-side
-    // If not, we'd need to execute the search and return results
     const toolResults = assistantMessage.tool_calls.map((tc) => ({
       role: 'tool',
       tool_call_id: tc.id,
@@ -143,7 +224,6 @@ async function handleToolCalls(ai, originalMessages, assistantMessage, requestPa
       }),
     }));
 
-    // Continue the conversation with tool results
     const followUpMessages = [
       ...originalMessages,
       assistantMessage,
@@ -168,10 +248,32 @@ async function handleToolCalls(ai, originalMessages, assistantMessage, requestPa
 }
 
 /**
+ * Categorize an error into a known type for upstream handling.
+ */
+function categorizeError(error) {
+  if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+    return 'timeout';
+  }
+  if (error.status === 429) {
+    return 'rate_limited';
+  }
+  if (error.status === 401 || error.status === 403) {
+    return 'auth_failed';
+  }
+  if (error.status >= 500) {
+    return 'server_error';
+  }
+  return 'unknown';
+}
+
+/**
  * Check if the AI client is properly configured.
  */
 export function isAIConfigured() {
   return !!(env.NVIDIA_API_KEY && env.NVIDIA_API_KEY !== 'nvapi-xxx');
 }
 
-export { MODEL, MAX_TOKENS, TEMPERATURE };
+// ── Legacy export for backward compatibility ──
+export const callKimi = callAI;
+
+export { MODEL_TIERS };
