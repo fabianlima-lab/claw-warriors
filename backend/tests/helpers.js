@@ -1,0 +1,93 @@
+import { vi } from 'vitest';
+
+// Mock PrismaClient before importing anything that uses it
+const mockPrisma = {
+  user: {
+    findUnique: vi.fn(),
+    findFirst: vi.fn(),
+    findMany: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    updateMany: vi.fn(),
+    count: vi.fn(),
+    delete: vi.fn(),
+  },
+  warrior: {
+    findUnique: vi.fn(),
+    findFirst: vi.fn(),
+    findMany: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    updateMany: vi.fn(),
+    count: vi.fn(),
+    delete: vi.fn(),
+  },
+  warriorTemplate: {
+    findUnique: vi.fn(),
+    findFirst: vi.fn(),
+    findMany: vi.fn(),
+  },
+  message: {
+    findMany: vi.fn(),
+    create: vi.fn(),
+    deleteMany: vi.fn(),
+    count: vi.fn(),
+  },
+  $connect: vi.fn(),
+  $disconnect: vi.fn(),
+};
+
+vi.mock('@prisma/client', () => {
+  return {
+    PrismaClient: vi.fn(function () { return mockPrisma; }),
+  };
+});
+
+// Mock external services
+vi.mock('../src/services/telegram.js', () => ({
+  sendTelegramMessage: vi.fn().mockResolvedValue(true),
+  setTelegramWebhook: vi.fn().mockResolvedValue(true),
+  sendTypingAction: vi.fn().mockResolvedValue(true),
+}));
+
+vi.mock('../src/services/whatsapp.js', () => ({
+  sendWhatsAppMessage: vi.fn().mockResolvedValue(true),
+}));
+
+vi.mock('../src/services/ai-client.js', () => ({
+  callKimi: vi.fn().mockResolvedValue({ content: 'Mock AI response', error: null }),
+  isAIConfigured: vi.fn().mockReturnValue(false),
+}));
+
+vi.mock('../src/services/message-router.js', () => ({
+  routeIncomingMessage: vi.fn().mockResolvedValue(true),
+}));
+
+// Mock google-auth-library
+vi.mock('google-auth-library', () => {
+  return {
+    OAuth2Client: vi.fn(function () {
+      this.verifyIdToken = vi.fn();
+    }),
+  };
+});
+
+// Mock stripe
+vi.mock('stripe', () => {
+  return {
+    default: vi.fn(function () { return null; }),
+  };
+});
+
+export { mockPrisma };
+
+export async function buildTestApp() {
+  const { build } = await import('../src/server.js');
+  const app = await build();
+  await app.ready();
+  return app;
+}
+
+export function getAuthToken(app, userId = 'test-user-id', email = 'test@example.com') {
+  return app.jwt.sign({ userId, email });
+}

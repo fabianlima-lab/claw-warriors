@@ -9,7 +9,9 @@
     "dev": "nodemon src/server.js",
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
-    "prisma:seed": "node prisma/seed.js"
+    "prisma:seed": "node prisma/seed.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -32,6 +34,7 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.11",
-    "prisma": "^6.19.2"
+    "prisma": "^6.19.2",
+    "vitest": "^4.0.18"
   }
 }

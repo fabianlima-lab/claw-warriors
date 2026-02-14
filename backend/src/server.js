@@ -15,7 +15,7 @@ import userRoutes from './routes/users.js';
 
 async function build() {
   const app = Fastify({
-    logger: {
+    logger: env.NODE_ENV === 'test' ? false : {
       level: env.NODE_ENV === 'production' ? 'info' : 'debug',
     },
   });
@@ -48,6 +48,8 @@ async function build() {
 
   await app.register(rateLimit, {
     global: false,
+    max: env.NODE_ENV === 'test' ? 1000 : 1000,
+    allowList: env.NODE_ENV === 'test' ? () => true : undefined,
   });
 
   // Auth decorator
@@ -90,6 +92,8 @@ async function start() {
   }
 }
 
-start();
+if (process.env.NODE_ENV !== 'test') {
+  start();
+}
 
 export { build };
