@@ -15,12 +15,10 @@ export default function ChatDemo() {
   ];
 
   useEffect(() => {
-    if (step < MESSAGES.length) {
-      const timer = setTimeout(() => setStep((s) => s + 1), step === 0 ? 1200 : 2000);
-      return () => clearTimeout(timer);
-    }
-    const reset = setTimeout(() => setStep(0), 4000);
-    return () => clearTimeout(reset);
+    if (step >= MESSAGES.length) return;
+    const delay = step === 0 ? 1200 : 2000;
+    const timer = setTimeout(() => setStep((s) => s + 1), delay);
+    return () => clearTimeout(timer);
   }, [step, MESSAGES.length]);
 
   return (
@@ -39,33 +37,31 @@ export default function ChatDemo() {
           </div>
         </div>
 
-        {/* Messages */}
-        <div className="px-4 py-5 min-h-[260px] flex flex-col gap-3">
-          {MESSAGES.slice(0, step).map((msg, i) => (
-            <div key={i} className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}
-              style={{ animation: 'fadeSlideUp 0.4s ease' }}>
+        {/* Messages — all in DOM for stable layout, visibility toggled */}
+        <div className="px-4 py-5 flex flex-col gap-3">
+          {MESSAGES.map((msg, i) => {
+            const isVisible = i < step;
+            return (
               <div
-                className="max-w-[80%] px-3.5 py-2.5 rounded-[14px] text-[15px] leading-relaxed text-txt"
+                key={i}
+                className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}
                 style={{
-                  background: msg.from === 'user' ? 'rgba(232,99,43,0.15)' : 'rgba(255,255,255,0.05)',
-                  border: msg.from === 'user' ? '1px solid rgba(232,99,43,0.25)' : '1px solid var(--color-border)',
+                  visibility: isVisible ? 'visible' : 'hidden',
+                  animation: isVisible ? 'fadeSlideUp 0.4s ease forwards' : 'none',
                 }}
               >
-                {msg.text}
-              </div>
-            </div>
-          ))}
-          {step < MESSAGES.length && (
-            <div className="flex gap-1 pl-2">
-              {[0, 1, 2].map((i) => (
                 <div
-                  key={i}
-                  className="w-1.5 h-1.5 rounded-full bg-txt-dim"
-                  style={{ animation: `pulse-dot 1s ease-in-out ${i * 0.15}s infinite` }}
-                />
-              ))}
-            </div>
-          )}
+                  className="max-w-[80%] px-3.5 py-2.5 rounded-[14px] text-[15px] leading-relaxed text-txt"
+                  style={{
+                    background: msg.from === 'user' ? 'rgba(232,99,43,0.15)' : 'rgba(255,255,255,0.05)',
+                    border: msg.from === 'user' ? '1px solid rgba(232,99,43,0.25)' : '1px solid var(--color-border)',
+                  }}
+                >
+                  {msg.text}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
