@@ -92,6 +92,10 @@ export default function PricingSection() {
           </div>
         ))}
       </div>
+
+      <p className="text-[13px] text-txt-dim mt-8">
+        {t('trustLine')}
+      </p>
     </section>
   );
 }

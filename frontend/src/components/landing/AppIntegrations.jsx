@@ -61,6 +61,9 @@ export default function AppIntegrations() {
       <p className="text-[15px] text-txt-dim mt-8">
         {t('moreApps')}
       </p>
+      <p className="text-[13px] text-txt-dim mt-4">
+        {t('trustLine')}
+      </p>
     </section>
   );
 }

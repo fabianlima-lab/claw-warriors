@@ -32,7 +32,10 @@
     "trustChat": "Chat on Telegram",
     "trustUnlimited": "Unlimited Messages",
     "trustMemory": "Remembers Everything",
-    "trustFree": "$0 API Keys"
+    "trustFree": "$0 API Keys",
+    "trustDot1": "No data sold",
+    "trustDot2": "Encrypted",
+    "trustDot3": "Cancel anytime"
   },
   "ChatDemo": {
     "userMsg1": "Hey Mia, check my Gmail and summarize anything urgent",
@@ -46,7 +49,8 @@
     "label": "INTEGRATIONS",
     "title": "Works With Apps You Already Use",
     "subtitle": "Your warrior connects to 50+ apps. No setup wizards. Just tell it what you need.",
-    "moreApps": "+ Uber, Todoist, Whoop, Obsidian, WordPress, and 30 more via OpenClaw skills"
+    "moreApps": "+ Uber, Todoist, Whoop, Obsidian, WordPress, and 30 more via OpenClaw skills",
+    "trustLine": "Every integration uses encrypted OAuth — your credentials never touch our servers."
   },
   "ValueProps": {
     "label": "WHAT IT ACTUALLY DOES",
@@ -131,7 +135,8 @@
     "feature_preview": "Full feature preview",
     "feature_customName": "Custom name & tone",
     "feature_memory": "Persistent memory",
-    "feature_priority": "Priority support"
+    "feature_priority": "Priority support",
+    "trustLine": "Cancel anytime · No hidden fees · Secure checkout via Stripe"
   },
   "Footer": {
     "brand": "CLAWWARRIORS",
@@ -455,6 +460,48 @@
     "accessDenied": "Access Denied",
     "never": "Never",
     "none": "None"
+  },
+  "SocialProof": {
+    "count": "500+ warriors deployed",
+    "quote": "It replaced 3 apps for me in a week",
+    "quoteAuthor": "Early adopter"
+  },
+  "Trust": {
+    "label": "TRUST & SAFETY",
+    "title": "You're In Control. Always.",
+    "dataTitle": "Your Data",
+    "rulesTitle": "Your Rules",
+    "data1": "Encrypted storage — your messages are protected at rest and in transit",
+    "data2": "We never sell your data to third parties — period",
+    "data3": "Delete your account and all data anytime from Settings",
+    "data4": "HTTPS everywhere — every connection is encrypted end-to-end",
+    "rules1": "Cancel your subscription anytime — no questions asked",
+    "rules2": "No lock-in contracts — leave whenever you want",
+    "rules3": "Full data export — take your conversation history with you",
+    "rules4": "Transparent pricing — what you see is what you pay"
+  },
+  "FAQ": {
+    "label": "FAQ",
+    "title": "Common Questions",
+    "q1": "Is my data safe?",
+    "a1": "Yes. All data is encrypted at rest and in transit. We never sell your information to third parties. You can delete your account and all associated data anytime from your settings page.",
+    "q2": "Do I need to share my API keys?",
+    "a2": "No. ClawWarriors handles all the infrastructure — AI models, servers, and integrations. You never need to create or manage API keys. Just pick a warrior and start chatting.",
+    "q3": "Can I cancel anytime?",
+    "a3": "Absolutely. There are no lock-in contracts. Cancel from your settings page and your subscription ends at the current billing period. No cancellation fees, no questions asked.",
+    "q4": "What apps does it work with?",
+    "a4": "Your warrior connects to 50+ apps including Gmail, Google Calendar, Spotify, Notion, Slack, and more. New integrations are added regularly through OpenClaw skills.",
+    "q5": "What happens after my trial?",
+    "a5": "After your 7-day trial, the service pauses — there's no automatic charge. You can upgrade to Pro anytime to continue, or start a new trial. Your data stays safe."
+  },
+  "FinalCta": {
+    "title": "Ready to Deploy Your Warrior?",
+    "subtitle": "7-day free trial. No credit card required. Cancel anytime.",
+    "cta": "Start Free Trial"
+  },
+  "StickyCta": {
+    "text": "Start your 7-day free trial — no credit card required",
+    "cta": "Get Started →"
   },
   "Metadata": {
     "siteTitle": "ClawWarriors — Your AI Warrior, Your Rules",

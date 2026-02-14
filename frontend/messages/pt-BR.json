@@ -32,7 +32,10 @@
     "trustChat": "Chat no Telegram",
     "trustUnlimited": "Mensagens Ilimitadas",
     "trustMemory": "Lembra de Tudo",
-    "trustFree": "$0 em API Keys"
+    "trustFree": "$0 em API Keys",
+    "trustDot1": "Dados nunca vendidos",
+    "trustDot2": "Criptografado",
+    "trustDot3": "Cancele quando quiser"
   },
   "ChatDemo": {
     "userMsg1": "Ei Mia, confere meu Gmail e resume o que for urgente",
@@ -46,7 +49,8 @@
     "label": "INTEGRAÇÕES",
     "title": "Funciona Com os Apps Que Você Já Usa",
     "subtitle": "Seu guerreiro se conecta a mais de 50 apps. Sem configuração complicada. Só diga o que precisa.",
-    "moreApps": "+ Uber, Todoist, Whoop, Obsidian, WordPress, e mais 30 via skills do OpenClaw"
+    "moreApps": "+ Uber, Todoist, Whoop, Obsidian, WordPress, e mais 30 via skills do OpenClaw",
+    "trustLine": "Todas as integrações usam OAuth criptografado — suas credenciais nunca tocam nossos servidores."
   },
   "ValueProps": {
     "label": "O QUE ELE REALMENTE FAZ",
@@ -131,7 +135,8 @@
     "feature_preview": "Acesso completo às funcionalidades",
     "feature_customName": "Nome e tom personalizados",
     "feature_memory": "Memória persistente",
-    "feature_priority": "Suporte prioritário"
+    "feature_priority": "Suporte prioritário",
+    "trustLine": "Cancele quando quiser · Sem taxas escondidas · Checkout seguro via Stripe"
   },
   "Footer": {
     "brand": "CLAWWARRIORS",
@@ -455,6 +460,48 @@
     "accessDenied": "Acesso Negado",
     "never": "Nunca",
     "none": "Nenhum"
+  },
+  "SocialProof": {
+    "count": "500+ guerreiros ativados",
+    "quote": "Substituiu 3 apps pra mim em uma semana",
+    "quoteAuthor": "Usuário pioneiro"
+  },
+  "Trust": {
+    "label": "CONFIANÇA & SEGURANÇA",
+    "title": "Você Está no Controle. Sempre.",
+    "dataTitle": "Seus Dados",
+    "rulesTitle": "Suas Regras",
+    "data1": "Armazenamento criptografado — suas mensagens são protegidas em repouso e em trânsito",
+    "data2": "Nunca vendemos seus dados para terceiros — ponto final",
+    "data3": "Exclua sua conta e todos os dados a qualquer momento nas Configurações",
+    "data4": "HTTPS em todo lugar — cada conexão é criptografada de ponta a ponta",
+    "rules1": "Cancele sua assinatura a qualquer momento — sem perguntas",
+    "rules2": "Sem contratos de fidelidade — saia quando quiser",
+    "rules3": "Exportação completa de dados — leve seu histórico de conversas com você",
+    "rules4": "Preços transparentes — o que você vê é o que você paga"
+  },
+  "FAQ": {
+    "label": "FAQ",
+    "title": "Perguntas Frequentes",
+    "q1": "Meus dados estão seguros?",
+    "a1": "Sim. Todos os dados são criptografados em repouso e em trânsito. Nunca vendemos suas informações para terceiros. Você pode excluir sua conta e todos os dados associados a qualquer momento nas configurações.",
+    "q2": "Preciso compartilhar minhas chaves de API?",
+    "a2": "Não. O ClawWarriors cuida de toda a infraestrutura — modelos de IA, servidores e integrações. Você nunca precisa criar ou gerenciar chaves de API. Basta escolher um guerreiro e começar a conversar.",
+    "q3": "Posso cancelar a qualquer momento?",
+    "a3": "Com certeza. Não há contratos de fidelidade. Cancele pela página de configurações e sua assinatura encerra no final do período de cobrança atual. Sem taxas de cancelamento, sem perguntas.",
+    "q4": "Com quais apps funciona?",
+    "a4": "Seu guerreiro se conecta a mais de 50 apps incluindo Gmail, Google Calendar, Spotify, Notion, Slack e mais. Novas integrações são adicionadas regularmente através das skills do OpenClaw.",
+    "q5": "O que acontece depois do meu teste?",
+    "a5": "Após seu teste de 7 dias, o serviço pausa — não há cobrança automática. Você pode fazer upgrade para o Pro a qualquer momento para continuar, ou iniciar um novo teste. Seus dados continuam seguros."
+  },
+  "FinalCta": {
+    "title": "Pronto para Ativar Seu Guerreiro?",
+    "subtitle": "Teste grátis de 7 dias. Sem cartão de crédito. Cancele quando quiser.",
+    "cta": "Começar Teste Grátis"
+  },
+  "StickyCta": {
+    "text": "Comece seu teste grátis de 7 dias — sem cartão de crédito",
+    "cta": "Começar →"
   },
   "Metadata": {
     "siteTitle": "ClawWarriors — Seu Guerreiro de IA, Suas Regras",

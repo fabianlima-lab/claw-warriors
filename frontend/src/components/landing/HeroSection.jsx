@@ -11,7 +11,7 @@ export default function HeroSection() {
   useEffect(() => { setTimeout(() => setVisible(true), 100); }, []);
 
   return (
-    <section className="min-h-[90vh] flex flex-col items-center justify-center text-center px-6 py-20 relative overflow-hidden">
+    <section id="hero" className="min-h-[90vh] flex flex-col items-center justify-center text-center px-6 py-20 relative overflow-hidden">
       {/* Radial glow */}
       <div
         className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full pointer-events-none"
