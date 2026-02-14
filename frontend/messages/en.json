@@ -401,6 +401,13 @@
     "lastUpdated": "Last updated: February 2026",
     "backHome": "← Back to Home"
   },
+  "Chat": {
+    "emptyState": "No messages yet with {name}.",
+    "emptyHint": "Type a message below or chat on Telegram — it all shows up here.",
+    "placeholder": "Message {name}...",
+    "sendError": "Failed to send. Try again.",
+    "synced": "Synced with Telegram"
+  },
   "Metadata": {
     "siteTitle": "ClawWarriors — Your AI Warrior, Your Rules",
     "siteDescription": "Deploy personalized AI agents to Telegram and WhatsApp. Pick a warrior, connect your channel, start chatting — all in under 5 minutes."

@@ -9,6 +9,7 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import StatBar from '@/components/ui/StatBar';
 import TrialBanner from '@/components/TrialBanner';
+import ChatPanel from '@/components/ChatPanel';
 import { CLASS_LABELS, CLASS_HEX, CLASS_STAT_NAMES, CLASS_STAT_KEYS } from '@/lib/constants';
 import { apiFetch } from '@/lib/api';
 
@@ -62,102 +63,116 @@ export default function DashboardPage() {
         <TrialBanner trialEndsAt={stats.trial_ends_at} />
       )}
 
-      {/* Warrior cards */}
+      {/* Warrior + Chat */}
       <section>
         <h2 className="font-[family-name:var(--font-display)] text-2xl text-txt mb-6">
           {isProTribe ? t('yourWarriors') : t('yourWarrior')}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {warriors.map((w) => {
-            const cls = w.warriorClass || w.warrior_class;
-            const color = CLASS_HEX[cls];
-            const templateId = w.templateId || w.template_id;
-            const template = w.template || {};
-            const statNames = CLASS_STAT_NAMES[cls] || [];
-            const statKeys = CLASS_STAT_KEYS[cls] || [];
-            const warriorStats = template.stats || {};
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          {/* Left column: warrior card(s) */}
+          <div className={`${isProTribe ? 'lg:col-span-2' : 'lg:col-span-2'} space-y-6`}>
+            {warriors.map((w) => {
+              const cls = w.warriorClass || w.warrior_class;
+              const color = CLASS_HEX[cls];
+              const templateId = w.templateId || w.template_id;
+              const template = w.template || {};
+              const statNames = CLASS_STAT_NAMES[cls] || [];
+              const statKeys = CLASS_STAT_KEYS[cls] || [];
+              const warriorStats = template.stats || {};
 
-            return (
-              <Card key={w.id} className="p-6">
-                <div className="flex items-start gap-4">
-                  <Image
-                    src={`/warriors/${templateId}.png`}
-                    alt={template.name || templateId}
-                    width={isProTribe ? 64 : 80}
-                    height={isProTribe ? 64 : 80}
-                    className="rounded-full object-cover shrink-0"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-[family-name:var(--font-display)] text-lg text-txt">
-                      {w.customName || w.custom_name || template.name || templateId}
-                    </h3>
-                    <span
-                      className="text-xs uppercase tracking-wider font-medium"
-                      style={{ color }}
-                    >
-                      {tClasses(CLASS_LABELS[cls])}
-                    </span>
-                    {isProTribe && templateId && (
-                      <p className="text-xs text-txt-dim mt-1">
-                        @{(template.name || '').replace(/\s/g, '')}{tClasses(CLASS_LABELS[cls])}Bot
-                      </p>
-                    )}
-                    {template.introQuote && (
-                      <p className="text-sm text-txt-muted italic mt-2 truncate">
-                        &ldquo;{template.introQuote}&rdquo;
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Stats */}
-                <div className="mt-4 space-y-2">
-                  {statNames.map((name, i) => (
-                    <StatBar
-                      key={name}
-                      label={tStats(name)}
-                      value={warriorStats[statKeys[i]] || 0}
-                      warriorClass={cls}
+              return (
+                <Card key={w.id} className="p-6">
+                  <div className="flex items-start gap-4">
+                    <Image
+                      src={`/warriors/${templateId}.png`}
+                      alt={template.name || templateId}
+                      width={isProTribe ? 64 : 80}
+                      height={isProTribe ? 64 : 80}
+                      className="rounded-full object-cover shrink-0"
                     />
-                  ))}
-                </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-[family-name:var(--font-display)] text-lg text-txt">
+                        {w.customName || w.custom_name || template.name || templateId}
+                      </h3>
+                      <span
+                        className="text-xs uppercase tracking-wider font-medium"
+                        style={{ color }}
+                      >
+                        {tClasses(CLASS_LABELS[cls])}
+                      </span>
+                      {isProTribe && templateId && (
+                        <p className="text-xs text-txt-dim mt-1">
+                          @{(template.name || '').replace(/\s/g, '')}{tClasses(CLASS_LABELS[cls])}Bot
+                        </p>
+                      )}
+                      {template.introQuote && (
+                        <p className="text-sm text-txt-muted italic mt-2 truncate">
+                          &ldquo;{template.introQuote}&rdquo;
+                        </p>
+                      )}
+                    </div>
+                  </div>
 
-                {/* Quick stats row */}
-                <div className="mt-4 flex items-center gap-4 text-xs text-txt-muted">
-                  <span>{t('msgsToday', { count: stats.messages_today || 0 })}</span>
-                  <span>{t('msgsMonth', { count: stats.messages_this_month || 0 })}</span>
-                </div>
+                  {/* Stats */}
+                  <div className="mt-4 space-y-2">
+                    {statNames.map((name, i) => (
+                      <StatBar
+                        key={name}
+                        label={tStats(name)}
+                        value={warriorStats[statKeys[i]] || 0}
+                        warriorClass={cls}
+                      />
+                    ))}
+                  </div>
 
-                {/* Actions */}
-                <div className="mt-4 flex gap-2">
-                  <Button
-                    variant="ghost"
-                    className="text-xs px-3 py-1.5"
-                    onClick={() => router.push('/warriors')}
-                  >
-                    {t('switch')}
-                  </Button>
+                  {/* Quick stats row */}
+                  <div className="mt-4 flex items-center gap-4 text-xs text-txt-muted">
+                    <span>{t('msgsToday', { count: stats.messages_today || 0 })}</span>
+                    <span>{t('msgsMonth', { count: stats.messages_this_month || 0 })}</span>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="mt-4 flex gap-2">
+                    <Button
+                      variant="ghost"
+                      className="text-xs px-3 py-1.5"
+                      onClick={() => router.push('/warriors')}
+                    >
+                      {t('switch')}
+                    </Button>
+                  </div>
+                </Card>
+              );
+            })}
+
+            {/* Add warrior slot (Pro Tribe only) */}
+            {isProTribe && warriors.length < maxWarriors && (
+              <Card
+                className="p-6 border-dashed cursor-pointer hover:border-accent transition-colors"
+                onClick={() => router.push('/warriors')}
+              >
+                <div className="flex flex-col items-center justify-center h-full gap-3 text-txt-muted">
+                  <span className="text-4xl">+</span>
+                  <span className="text-sm">
+                    {maxWarriors - warriors.length !== 1
+                      ? t('addWarriorPlural', { count: maxWarriors - warriors.length })
+                      : t('addWarrior', { count: maxWarriors - warriors.length })}
+                  </span>
                 </div>
               </Card>
-            );
-          })}
+            )}
+          </div>
 
-          {/* Add warrior slot (Pro Tribe only) */}
-          {isProTribe && warriors.length < maxWarriors && (
-            <Card
-              className="p-6 border-dashed cursor-pointer hover:border-accent transition-colors"
-              onClick={() => router.push('/warriors')}
-            >
-              <div className="flex flex-col items-center justify-center h-full gap-3 text-txt-muted">
-                <span className="text-4xl">+</span>
-                <span className="text-sm">
-                  {maxWarriors - warriors.length !== 1
-                    ? t('addWarriorPlural', { count: maxWarriors - warriors.length })
-                    : t('addWarrior', { count: maxWarriors - warriors.length })}
-                </span>
-              </div>
-            </Card>
-          )}
+          {/* Right column: Chat panel */}
+          <div className="lg:col-span-3">
+            {warriors.length > 0 && (
+              <ChatPanel warrior={{
+                name: warriors[0].customName || warriors[0].custom_name || warriors[0].template?.name || warriors[0].templateId || warriors[0].template_id,
+                templateId: warriors[0].templateId || warriors[0].template_id,
+                template: warriors[0].template,
+              }} />
+            )}
+          </div>
         </div>
       </section>
 

@@ -56,7 +56,10 @@ vi.mock('../src/services/whatsapp.js', () => ({
 
 vi.mock('../src/services/ai-client.js', () => ({
   callKimi: vi.fn().mockResolvedValue({ content: 'Mock AI response', error: null }),
+  callAI: vi.fn().mockResolvedValue({ content: 'Mock AI response', error: null, tier: 1, model: 'test-model', responseTimeMs: 100 }),
+  callAIStream: vi.fn(),
   isAIConfigured: vi.fn().mockReturnValue(false),
+  MODEL_TIERS: { 1: { name: 'Test' }, 2: { name: 'Test' }, 3: { name: 'Test' } },
 }));
 
 vi.mock('../src/services/message-router.js', () => ({

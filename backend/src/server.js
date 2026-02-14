@@ -12,6 +12,7 @@ import demoRoutes from './routes/demo.js';
 import webhookRoutes from './routes/webhooks.js';
 import channelRoutes from './routes/channels.js';
 import userRoutes from './routes/users.js';
+import chatRoutes from './routes/chat.js';
 
 async function build() {
   const app = Fastify({
@@ -75,6 +76,7 @@ async function build() {
   app.register(webhookRoutes, { prefix: '/api/webhooks' });
   app.register(channelRoutes, { prefix: '/api/channels' });
   app.register(userRoutes, { prefix: '/api/users' });
+  app.register(chatRoutes, { prefix: '/api/chat' });
 
   return app;
 }

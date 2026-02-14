@@ -401,6 +401,13 @@
     "lastUpdated": "Última atualização: Fevereiro de 2026",
     "backHome": "← Voltar ao Início"
   },
+  "Chat": {
+    "emptyState": "Sem mensagens ainda com {name}.",
+    "emptyHint": "Digite uma mensagem abaixo ou converse no Telegram — tudo aparece aqui.",
+    "placeholder": "Mensagem para {name}...",
+    "sendError": "Falha ao enviar. Tente novamente.",
+    "synced": "Sincronizado com Telegram"
+  },
   "Metadata": {
     "siteTitle": "ClawWarriors — Seu Guerreiro de IA, Suas Regras",
     "siteDescription": "Ative agentes de IA personalizados no Telegram e WhatsApp. Escolha um guerreiro, conecte seu canal, comece a conversar — tudo em menos de 5 minutos."
