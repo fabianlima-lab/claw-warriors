@@ -42,6 +42,10 @@ const env = {
   MODEL_ROUTING_ENABLED: process.env.MODEL_ROUTING_ENABLED !== 'false', // default: true
   LOG_ROUTING_DECISIONS: process.env.LOG_ROUTING_DECISIONS !== 'false', // default: true
 
+  // Email (Resend)
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
+
   // Admin
   ADMIN_EMAILS: (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean),
 

@@ -22,6 +22,8 @@ model User {
   goals                 String?
   stripeCustomerId      String?   @map("stripe_customer_id") @db.VarChar(255)
   stripeSubscriptionId  String?   @map("stripe_subscription_id") @db.VarChar(255)
+  passwordResetToken    String?   @unique @map("password_reset_token") @db.VarChar(255)
+  passwordResetExpiry   DateTime? @map("password_reset_expiry")
   createdAt             DateTime  @default(now()) @map("created_at")
   updatedAt             DateTime  @default(now()) @updatedAt @map("updated_at")
 

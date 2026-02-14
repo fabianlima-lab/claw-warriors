@@ -15,3 +15,5 @@ process.env.STRIPE_PRICE_PRO_TRIBE = '';
 process.env.TELEGRAM_BOT_TOKEN = '';
 process.env.NVIDIA_API_KEY = '';
 process.env.GOOGLE_CLIENT_ID = '';
+process.env.RESEND_API_KEY = '';
+process.env.RESEND_FROM_EMAIL = '';

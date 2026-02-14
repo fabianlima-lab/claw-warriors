@@ -98,15 +98,22 @@ export default function LoginPage() {
           placeholder={t('emailPlaceholder')}
           required
         />
-        <Input
-          label={t('password')}
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder={t('passwordPlaceholder')}
-          required
-        />
+        <div>
+          <Input
+            label={t('password')}
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder={t('passwordPlaceholder')}
+            required
+          />
+          <div className="mt-1 text-right">
+            <Link href="/forgot-password" className="text-xs text-accent hover:underline">
+              {t('forgotPassword')}
+            </Link>
+          </div>
+        </div>
         {displayError && <p className="text-danger text-sm">{displayError}</p>}
         <Button type="submit" loading={loading || googleLoading} className="w-full">
           {tCommon('signIn')}

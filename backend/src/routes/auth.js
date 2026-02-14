@@ -1,7 +1,9 @@
+import crypto from 'node:crypto';
 import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 import { OAuth2Client } from 'google-auth-library';
 import env from '../config/env.js';
+import { sendPasswordResetEmail } from '../services/email.js';
 
 const prisma = new PrismaClient();
 
@@ -185,6 +187,154 @@ async function authRoutes(app) {
       if (error.message?.includes('Token used too late') || error.message?.includes('Invalid token')) {
         return reply.code(401).send({ error: 'Google authentication failed. Please try again.' });
       }
+      return reply.code(500).send({ error: 'Something went wrong. Try again in a moment.' });
+    }
+  });
+
+  // POST /api/auth/forgot-password
+  app.post('/forgot-password', {
+    config: {
+      rateLimit: { max: 3, timeWindow: '1 minute' },
+    },
+  }, async (request, reply) => {
+    const { email } = request.body || {};
+
+    if (!email || !EMAIL_RE.test(email)) {
+      return reply.code(400).send({ error: 'Valid email is required' });
+    }
+
+    // Always return 200 to prevent email enumeration
+    const successMsg = { message: 'If that email exists, we sent a reset link.' };
+
+    try {
+      const user = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
+
+      // No user found, or Google-only user (no password to reset)
+      if (!user || (user.authProvider === 'google' && !user.passwordHash)) {
+        return reply.send(successMsg);
+      }
+
+      // Generate 48-byte hex token, hash with SHA-256 before storing
+      const rawToken = crypto.randomBytes(48).toString('hex');
+      const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          passwordResetToken: hashedToken,
+          passwordResetExpiry: new Date(Date.now() + 15 * 60 * 1000), // 15 min
+        },
+      });
+
+      // Send email (fire-and-forget style — don't fail the request if email fails)
+      const sent = await sendPasswordResetEmail(user.email, rawToken);
+      if (!sent) {
+        console.error(`[AUTH] reset email failed for: ${user.email}`);
+      } else {
+        console.log(`[AUTH] reset email sent to: ${user.email}`);
+      }
+
+      return reply.send(successMsg);
+    } catch (err) {
+      console.error('[ERROR] forgot-password failed:', err.message);
+      return reply.code(500).send({ error: 'Something went wrong. Try again in a moment.' });
+    }
+  });
+
+  // POST /api/auth/reset-password
+  app.post('/reset-password', {
+    config: {
+      rateLimit: { max: 5, timeWindow: '1 minute' },
+    },
+  }, async (request, reply) => {
+    const { token, password } = request.body || {};
+
+    if (!token || !password) {
+      return reply.code(400).send({ error: 'Token and new password are required' });
+    }
+
+    if (password.length < 8) {
+      return reply.code(400).send({ error: 'Password must be at least 8 characters' });
+    }
+
+    try {
+      // Hash the incoming token to match the stored hash
+      const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+      const user = await prisma.user.findFirst({
+        where: {
+          passwordResetToken: hashedToken,
+          passwordResetExpiry: { gt: new Date() },
+        },
+      });
+
+      if (!user) {
+        return reply.code(400).send({ error: 'Invalid or expired reset link. Please request a new one.' });
+      }
+
+      const passwordHash = await bcrypt.hash(password, 10);
+
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          passwordHash,
+          passwordResetToken: null,
+          passwordResetExpiry: null,
+          // If Google-only user sets a password, upgrade to "both"
+          authProvider: user.authProvider === 'google' ? 'both' : user.authProvider,
+        },
+      });
+
+      console.log(`[AUTH] password reset: ${user.id}`);
+      return reply.send({ message: 'Password reset successfully.' });
+    } catch (err) {
+      console.error('[ERROR] reset-password failed:', err.message);
+      return reply.code(500).send({ error: 'Something went wrong. Try again in a moment.' });
+    }
+  });
+
+  // POST /api/auth/change-password (authenticated)
+  app.post('/change-password', {
+    preHandler: [app.authenticate],
+    config: {
+      rateLimit: { max: 5, timeWindow: '1 minute' },
+    },
+  }, async (request, reply) => {
+    const { currentPassword, newPassword } = request.body || {};
+
+    if (!currentPassword || !newPassword) {
+      return reply.code(400).send({ error: 'Current password and new password are required' });
+    }
+
+    if (newPassword.length < 8) {
+      return reply.code(400).send({ error: 'Password must be at least 8 characters' });
+    }
+
+    try {
+      const user = await prisma.user.findUnique({ where: { id: request.user.userId } });
+      if (!user) {
+        return reply.code(404).send({ error: 'User not found' });
+      }
+
+      if (!user.passwordHash) {
+        return reply.code(400).send({ error: 'This account uses Google sign-in and has no password to change. Use "Forgot Password" to set one.' });
+      }
+
+      const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+      if (!valid) {
+        return reply.code(401).send({ error: 'Current password is incorrect' });
+      }
+
+      const passwordHash = await bcrypt.hash(newPassword, 10);
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { passwordHash },
+      });
+
+      console.log(`[AUTH] password changed: ${user.id}`);
+      return reply.send({ message: 'Password updated successfully.' });
+    } catch (err) {
+      console.error('[ERROR] change-password failed:', err.message);
       return reply.code(500).send({ error: 'Something went wrong. Try again in a moment.' });
     }
   });

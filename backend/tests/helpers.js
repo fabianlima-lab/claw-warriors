@@ -70,6 +70,12 @@ vi.mock('../src/services/message-router.js', () => ({
   routeIncomingMessage: vi.fn().mockResolvedValue(true),
 }));
 
+// Mock email service
+vi.mock('../src/services/email.js', () => ({
+  sendPasswordResetEmail: vi.fn().mockResolvedValue(true),
+  isEmailConfigured: vi.fn().mockReturnValue(true),
+}));
+
 // Mock google-auth-library
 vi.mock('google-auth-library', () => {
   return {
