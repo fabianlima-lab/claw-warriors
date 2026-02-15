@@ -17,8 +17,8 @@ export async function generateMetadata({ params }) {
     description: meta.siteDescription || 'Deploy personalized AI agents to Telegram and WhatsApp.',
     manifest: '/manifest.json',
     icons: {
-      icon: [{ url: '/icon.png', type: 'image/png' }],
-      apple: '/apple-icon.png',
+      icon: [{ url: '/icon.png?v=2', type: 'image/png', sizes: '64x64' }],
+      apple: '/apple-icon.png?v=2',
     },
   };
 }
