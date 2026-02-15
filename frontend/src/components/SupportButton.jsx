@@ -1,14 +1,12 @@
 'use client';
 
-import Link from 'next/link';
-
 export default function SupportButton() {
   return (
-    <Link
-      href="/support"
+    <a
+      href="mailto:support@clawwarriors.com"
       className="fixed bottom-5 right-5 z-[60] w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center text-txt-muted hover:text-accent hover:border-accent transition-all shadow-lg"
-      title="Support Center"
-      aria-label="Support Center"
+      title="Contact Support"
+      aria-label="Contact Support"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -23,6 +21,6 @@ export default function SupportButton() {
       >
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
       </svg>
-    </Link>
+    </a>
   );
 }

@@ -26,8 +26,8 @@ function tierFromPriceId(priceId) {
 
 // Reverse lookup: amount → tier (fallback when price IDs not configured)
 function tierFromAmount(amountInCents) {
-  if (amountInCents === 3000) return 'pro';
-  if (amountInCents === 5000) return 'pro_tribe';
+  if (amountInCents === 3900) return 'pro';
+  if (amountInCents === 5900) return 'pro_tribe';
   return null;
 }
 

@@ -3,9 +3,9 @@ import { render, screen, fireEvent } from '#test-utils';
 import ClassTabs from '@/components/ClassTabs';
 
 describe('ClassTabs', () => {
-  const classes = ['guardian', 'scholar', 'creator', 'strategist', 'sentinel'];
+  const classes = ['guardian', 'scholar', 'bard', 'artificer', 'rogue'];
   // Translated labels from en.json Classes namespace
-  const classLabels = ['Guardian', 'Scholar', 'Creator', 'Strategist', 'Sentinel'];
+  const classLabels = ['Guardian', 'Scholar', 'Bard', 'Artificer', 'Rogue'];
 
   it('renders all 5 class tabs', () => {
     render(<ClassTabs selected="guardian" onSelect={vi.fn()} />);

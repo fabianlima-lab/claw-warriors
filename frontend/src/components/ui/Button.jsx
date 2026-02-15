@@ -8,9 +8,9 @@ const variants = {
   danger: 'bg-danger text-white hover:brightness-110',
   guardian: 'bg-guardian text-bg hover:brightness-110',
   scholar: 'bg-scholar text-bg hover:brightness-110',
-  creator: 'bg-creator text-bg hover:brightness-110',
-  strategist: 'bg-strategist text-bg hover:brightness-110',
-  sentinel: 'bg-sentinel text-bg hover:brightness-110',
+  bard: 'bg-bard text-bg hover:brightness-110',
+  artificer: 'bg-artificer text-bg hover:brightness-110',
+  rogue: 'bg-rogue text-bg hover:brightness-110',
 };
 
 export default function Button({

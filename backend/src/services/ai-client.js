@@ -2,13 +2,12 @@ import OpenAI from 'openai';
 import env from '../config/env.js';
 import { MODEL_TIERS, FALLBACK_CHAIN, NVIDIA_BASE_URL } from '../config/models.js';
 import { classifyQuery } from '../utils/query-analyzer.js';
-import { getUserApiKey } from './vault.js';
 
 // ─────────────────────────────────────────────────────
 // 3-Tier AI Client via NVIDIA NIMs (OpenAI-compatible)
 // ─────────────────────────────────────────────────────
 
-/** Reusable OpenAI client (one per process, platform key) */
+/** Reusable OpenAI client (one per process) */
 let client = null;
 
 function getClient() {
@@ -19,22 +18,10 @@ function getClient() {
     client = new OpenAI({
       baseURL: NVIDIA_BASE_URL,
       apiKey: env.NVIDIA_API_KEY,
-      timeout: 60000,
+      timeout: 60000, // max timeout, per-request timeout handled below
     });
   }
   return client;
-}
-
-/**
- * Get or create a BYOK client for a user's own API key.
- * Ephemeral — created per request, not cached (keys may rotate).
- */
-function getBYOKClient(apiKey) {
-  return new OpenAI({
-    baseURL: NVIDIA_BASE_URL,
-    apiKey,
-    timeout: 60000,
-  });
 }
 
 /**
@@ -48,35 +35,14 @@ function getBYOKClient(apiKey) {
  * @param {object} options
  * @param {boolean} [options.webSearch=false] - Enable web search tool (Tier 3 only)
  * @param {string} [options.userMessage] - The latest user message (for routing). If omitted, uses last message in history.
- * @param {string} [options.userId] - User ID for BYOK lookup. If provided, checks vault for user's own API key.
- * @returns {Promise<{content: string, error: string|null, tier: number, model: string, responseTimeMs: number, byok: boolean}>}
+ * @returns {Promise<{content: string, error: string|null, tier: number, model: string, responseTimeMs: number}>}
  */
 export async function callAI(systemPrompt, conversationHistory, options = {}) {
-  // BYOK: check if user has their own API key in the vault
-  let ai = null;
-  let byok = false;
-
-  if (options.userId) {
-    try {
-      const userKey = await getUserApiKey(options.userId);
-      if (userKey) {
-        ai = getBYOKClient(userKey);
-        byok = true;
-        console.log(`[BYOK] Using user's own API key for user:${options.userId.slice(0, 8)}...`);
-      }
-    } catch (err) {
-      console.error(`[BYOK] Failed to load user key: ${err.message}`);
-    }
-  }
-
-  // Fall back to platform client
-  if (!ai) {
-    ai = getClient();
-  }
+  const ai = getClient();
 
   if (!ai) {
     console.error('[ERROR] AI client not configured — NVIDIA_API_KEY missing');
-    return { content: null, error: 'ai_not_configured', tier: 0, model: null, responseTimeMs: 0, byok: false };
+    return { content: null, error: 'ai_not_configured', tier: 0, model: null, responseTimeMs: 0 };
   }
 
   // Determine which message to classify
@@ -84,19 +50,11 @@ export async function callAI(systemPrompt, conversationHistory, options = {}) {
     || conversationHistory.filter((m) => m.role === 'user').pop()?.content
     || '';
 
-  // Allow forcing a specific tier (used by memory extraction for cheap calls)
-  let tier, reason;
-  if (options.forceTier) {
-    tier = options.forceTier;
-    reason = 'forced';
-  } else {
-    ({ tier, reason } = classifyQuery(userMessage));
-  }
+  const { tier, reason } = classifyQuery(userMessage);
   console.log(`[ROUTING] tier:${tier} reason:"${reason}" msg:"${userMessage.slice(0, 60)}"`);
 
   // Try the selected tier, then fall back through the chain
-  const result = await callWithFallback(ai, tier, systemPrompt, conversationHistory, options);
-  return { ...result, byok };
+  return callWithFallback(ai, tier, systemPrompt, conversationHistory, options);
 }
 
 /**

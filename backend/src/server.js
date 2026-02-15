@@ -2,10 +2,8 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
 import rateLimit from '@fastify/rate-limit';
-import multipart from '@fastify/multipart';
 import env from './config/env.js';
 
-import { PrismaClient } from '@prisma/client';
 import authRoutes from './routes/auth.js';
 import warriorRoutes from './routes/warriors.js';
 import billingRoutes from './routes/billing.js';
@@ -16,12 +14,6 @@ import channelRoutes from './routes/channels.js';
 import userRoutes from './routes/users.js';
 import chatRoutes from './routes/chat.js';
 import adminRoutes from './routes/admin.js';
-import memoryRoutes from './routes/memory.js';
-import pulseRoutes from './routes/pulse.js';
-import rhythmRoutes from './routes/rhythms.js';
-import questRoutes from './routes/quests.js';
-import vaultRoutes from './routes/vault.js';
-import { startScheduler } from './services/scheduler.js';
 
 async function build() {
   const app = Fastify({
@@ -35,8 +27,7 @@ async function build() {
     try {
       // Store raw body for Stripe webhook verification
       req.rawBody = body;
-      const str = body.toString();
-      const json = str.length > 0 ? JSON.parse(str) : {};
+      const json = JSON.parse(body.toString());
       done(null, json);
     } catch (err) {
       err.statusCode = 400;
@@ -63,17 +54,6 @@ async function build() {
     allowList: env.NODE_ENV === 'test' ? () => true : undefined,
   });
 
-  await app.register(multipart, {
-    limits: {
-      fileSize: 2 * 1024 * 1024, // 2MB max
-      files: 1,
-    },
-  });
-
-  // Prisma instance (shared across routes)
-  const prisma = new PrismaClient();
-  app.decorate('prisma', prisma);
-
   // Auth decorator
   app.decorate('authenticate', async function (request, reply) {
     try {
@@ -99,11 +79,6 @@ async function build() {
   app.register(userRoutes, { prefix: '/api/users' });
   app.register(chatRoutes, { prefix: '/api/chat' });
   app.register(adminRoutes, { prefix: '/api/admin' });
-  app.register(memoryRoutes, { prefix: '/api/memory' });
-  app.register(pulseRoutes, { prefix: '/api/pulse' });
-  app.register(rhythmRoutes, { prefix: '/api/rhythms' });
-  app.register(questRoutes, { prefix: '/api/quests' });
-  app.register(vaultRoutes, { prefix: '/api/vault' });
 
   return app;
 }
@@ -115,10 +90,6 @@ async function start() {
     await app.listen({ port: env.PORT, host: '0.0.0.0' });
     console.log(`[STARTUP] Server running on port ${env.PORT}`);
     console.log(`[STARTUP] Environment: ${env.NODE_ENV}`);
-
-    // Start the scheduler for pulse checks and war rhythms
-    startScheduler();
-    console.log(`[STARTUP] Scheduler started`);
   } catch (err) {
     console.error('[STARTUP] Failed to start server:', err.message);
     process.exit(1);

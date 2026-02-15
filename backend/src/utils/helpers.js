@@ -7,10 +7,6 @@ const TIER_FEATURES = {
     custom_name: false,
     custom_tone: false,
     web_search: true,
-    max_memories: 50,
-    soul_config: false,
-    max_pulses: 1,
-    max_rhythms: 0,
   },
   pro: {
     max_active_warriors: 1,
@@ -18,10 +14,6 @@ const TIER_FEATURES = {
     custom_name: true,
     custom_tone: true,
     web_search: true,
-    max_memories: 200,
-    soul_config: true,
-    max_pulses: 4,
-    max_rhythms: 5,
   },
   pro_tribe: {
     max_active_warriors: 3,
@@ -29,10 +21,6 @@ const TIER_FEATURES = {
     custom_name: true,
     custom_tone: true,
     web_search: true,
-    max_memories: 500,
-    soul_config: true,
-    max_pulses: 4,
-    max_rhythms: 15,
   },
 };
 

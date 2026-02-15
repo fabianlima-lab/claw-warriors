@@ -46,9 +46,6 @@ const env = {
   RESEND_API_KEY: process.env.RESEND_API_KEY,
   RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
 
-  // Vault encryption
-  VAULT_MASTER_KEY: process.env.VAULT_MASTER_KEY,
-
   // Admin
   ADMIN_EMAILS: (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean),
 

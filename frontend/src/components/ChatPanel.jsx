@@ -24,7 +24,6 @@ export default function ChatPanel({ warrior }) {
   const warriorName = warrior?.name || warrior?.template?.name || 'Warrior';
   const templateId = warrior?.templateId || warrior?.template_id;
   const portraitSrc = templateId ? `/warriors/${templateId}.png` : '/warriors/default.png';
-  const firstMessage = warrior?.template?.firstMessage || warrior?.template?.first_message;
 
   // Scroll to bottom
   const scrollToBottom = useCallback(() => {
@@ -133,7 +132,8 @@ export default function ChatPanel({ warrior }) {
   };
 
   return (
-    <div className="flex flex-col bg-card border border-border rounded-[var(--radius-card)] overflow-hidden h-[min(480px,60vh)] lg:h-full lg:max-h-[calc(100vh-8rem)]">
+    <div className="flex flex-col bg-card border border-border rounded-[var(--radius-card)] overflow-hidden"
+      style={{ height: 'min(520px, 60vh)' }}>
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-border shrink-0">
         <Image
@@ -155,20 +155,15 @@ export default function ChatPanel({ warrior }) {
           <div className="flex items-center justify-center h-full">
             <span className="text-sm text-txt-dim animate-pulse">{tCommon('loading')}</span>
           </div>
-        ) : messages.length === 0 && firstMessage ? (
-          <div className="flex flex-col h-full">
-            <div className="flex justify-start">
-              <div className="max-w-[80%]">
-                <div className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed bg-elevated text-txt-body border border-border rounded-bl-sm">
-                  {firstMessage}
-                </div>
-              </div>
-            </div>
-            <div className="flex-1" />
-            <p className="text-xs text-txt-dim text-center pb-2">{t('emptyHint')}</p>
-          </div>
         ) : messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-3 text-center px-4">
+            <Image
+              src={portraitSrc}
+              alt={warriorName}
+              width={56}
+              height={56}
+              className="rounded-full object-cover opacity-60"
+            />
             <p className="text-sm text-txt-muted">{t('emptyState', { name: warriorName })}</p>
             <p className="text-xs text-txt-dim">{t('emptyHint')}</p>
           </div>

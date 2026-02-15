@@ -44,10 +44,3 @@ export function apiPatch(path, body) {
     body: JSON.stringify(body),
   });
 }
-
-export function apiPut(path, body) {
-  return apiFetch(path, {
-    method: 'PUT',
-    body: JSON.stringify(body),
-  });
-}
