@@ -7,27 +7,29 @@ export default function ClassTabs({ selected, onSelect }) {
   const t = useTranslations('Classes');
 
   return (
-    <div className="flex flex-wrap gap-3 justify-center">
-      {CLASSES.map((cls) => {
-        const active = selected === cls;
-        return (
-          <button
-            key={cls}
-            onClick={() => onSelect(cls)}
-            className={`px-4 py-3 rounded-[var(--radius-btn)] text-sm font-medium transition-all cursor-pointer border flex flex-col items-center gap-1 min-w-[140px] ${
-              active
-                ? 'border-transparent text-bg'
-                : 'border-border text-txt-muted hover:text-txt bg-transparent'
-            }`}
-            style={active ? { background: CLASS_HEX[cls] } : {}}
-          >
-            <span>{CLASS_ICONS[cls]} {t(CLASS_LABELS[cls])}</span>
-            <span className={`text-[11px] font-normal leading-tight ${active ? 'opacity-80' : 'opacity-60'}`}>
-              {t(CLASS_DESCRIPTIONS[cls])}
-            </span>
-          </button>
-        );
-      })}
+    <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-wrap gap-2 justify-center">
+        {CLASSES.map((cls) => {
+          const active = selected === cls;
+          return (
+            <button
+              key={cls}
+              onClick={() => onSelect(cls)}
+              className={`px-4 py-2 rounded-[var(--radius-btn)] text-sm font-medium transition-all cursor-pointer border ${
+                active
+                  ? 'border-transparent text-bg'
+                  : 'border-border text-txt-muted hover:text-txt bg-transparent'
+              }`}
+              style={active ? { background: CLASS_HEX[cls] } : {}}
+            >
+              {CLASS_ICONS[cls]} {t(CLASS_LABELS[cls])}
+            </button>
+          );
+        })}
+      </div>
+      <p className="text-sm text-txt-muted text-center">
+        {t(CLASS_DESCRIPTIONS[selected])}
+      </p>
     </div>
   );
 }
