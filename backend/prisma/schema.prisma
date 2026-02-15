@@ -15,6 +15,7 @@ model User {
   authProvider          String    @default("email") @map("auth_provider") @db.VarChar(20)
   tier                  String    @default("trial") @db.VarChar(20)
   trialEndsAt           DateTime? @map("trial_ends_at")
+  timezone              String    @default("America/New_York") @db.VarChar(50)
   channel               String?   @db.VarChar(20)
   channelId             String?   @map("channel_id") @db.VarChar(255)
   channel2              String?   @map("channel_2") @db.VarChar(20)
@@ -41,11 +42,16 @@ model Warrior {
   warriorClass    String    @map("warrior_class") @db.VarChar(20)
   tone            String    @default("casual") @db.VarChar(20)
   systemPrompt    String    @map("system_prompt")
+  soulConfig      String?   @map("soul_config")
+  avatarUrl       String?   @map("avatar_url") @db.VarChar(500)
   isActive        Boolean   @default(true) @map("is_active")
   createdAt       DateTime  @default(now()) @map("created_at")
 
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   template        WarriorTemplate @relation(fields: [templateId], references: [id])
+  memories        WarriorMemory[]
+  pulses          PulseCheck[]
+  rhythms         WarRhythm[]
 
   @@index([userId])
   @@map("warriors")
@@ -81,4 +87,89 @@ model WarriorTemplate {
   warriors            Warrior[]
 
   @@map("warrior_templates")
+}
+
+model WarriorMemory {
+  id          String   @id @default(uuid()) @db.Uuid
+  warriorId   String   @map("warrior_id") @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  category    String   @db.VarChar(50)
+  content     String
+  source      String   @default("extracted") @db.VarChar(20)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  warrior     Warrior  @relation(fields: [warriorId], references: [id], onDelete: Cascade)
+
+  @@index([warriorId, category])
+  @@index([userId, createdAt])
+  @@map("warrior_memories")
+}
+
+model PulseCheck {
+  id          String    @id @default(uuid()) @db.Uuid
+  warriorId   String    @map("warrior_id") @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  type        String    @db.VarChar(30)
+  prompt      String
+  isActive    Boolean   @default(false) @map("is_active")
+  hour        Int       @default(8)
+  lastRunAt   DateTime? @map("last_run_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  warrior     Warrior   @relation(fields: [warriorId], references: [id], onDelete: Cascade)
+
+  @@index([isActive])
+  @@index([warriorId])
+  @@map("pulse_checks")
+}
+
+model VaultEntry {
+  id            String    @id @default(uuid()) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  label         String    @db.VarChar(100)
+  type          String    @db.VarChar(30)       // "api_key", "oauth_token"
+  encryptedValue String   @map("encrypted_value")  // AES-256-GCM encrypted
+  iv            String    @db.VarChar(32)        // Initialization vector (hex)
+  authTag       String    @map("auth_tag") @db.VarChar(32) // Auth tag (hex)
+  maskedPreview String    @map("masked_preview") @db.VarChar(20) // "sk-...abc" for display
+  expiresAt     DateTime? @map("expires_at")
+  lastUsedAt    DateTime? @map("last_used_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("vault_entries")
+}
+
+model QuestProgress {
+  id          String    @id @default(uuid()) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  questId     String    @map("quest_id") @db.VarChar(50)
+  xp          Int       @default(0)
+  completedAt DateTime  @default(now()) @map("completed_at")
+
+  @@unique([userId, questId])
+  @@index([userId])
+  @@map("quest_progress")
+}
+
+model WarRhythm {
+  id          String    @id @default(uuid()) @db.Uuid
+  warriorId   String    @map("warrior_id") @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  name        String    @db.VarChar(200)
+  taskPrompt  String    @map("task_prompt")
+  cronExpr    String    @map("cron_expr") @db.VarChar(50)
+  isActive    Boolean   @default(true) @map("is_active")
+  lastRunAt   DateTime? @map("last_run_at")
+  nextRunAt   DateTime? @map("next_run_at")
+  lastResult  String?   @map("last_result")
+  timezone    String    @default("America/New_York") @db.VarChar(50)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  warrior     Warrior   @relation(fields: [warriorId], references: [id], onDelete: Cascade)
+
+  @@index([isActive, nextRunAt])
+  @@index([warriorId])
+  @@map("war_rhythms")
 }

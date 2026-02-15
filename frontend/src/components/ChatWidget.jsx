@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 
 export default function ChatWidget({
   warriorName = 'Luna',
-  warriorClass = 'bard',
+  warriorClass = 'creator',
   portraitSrc = '/warriors/luna_bard.png',
   onSend,
   messages: externalMessages,

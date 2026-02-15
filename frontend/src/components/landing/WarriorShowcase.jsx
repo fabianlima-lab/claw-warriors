@@ -19,20 +19,20 @@ const FALLBACK_WARRIORS = {
     { id: 'kai_scholar', name: 'Kai', warriorClass: 'scholar', introQuote: "Learning doesn't have to feel like a grind.", artFile: '/warriors/kai_scholar.png', stats: { wisdom: 4, patience: 3, clarity: 5 } },
     { id: 'wren_scholar', name: 'Wren', warriorClass: 'scholar', introQuote: 'Once you see the framework, the rest clicks.', artFile: '/warriors/wren_scholar.png', stats: { wisdom: 4, patience: 4, clarity: 5 } },
   ],
-  bard: [
-    { id: 'luna_bard', name: 'Luna', warriorClass: 'bard', introQuote: 'This hook will stop the scroll.', artFile: '/warriors/luna_bard.png', stats: { creativity: 5, strategy: 3, momentum: 5 } },
-    { id: 'marco_bard', name: 'Marco', warriorClass: 'bard', introQuote: "Let's build a narrative around this.", artFile: '/warriors/marco_bard.png', stats: { creativity: 4, strategy: 5, momentum: 4 } },
-    { id: 'pixel_bard', name: 'Pixel', warriorClass: 'bard', introQuote: "Nobody's doing this yet — let's try it.", artFile: '/warriors/pixel_bard.png', stats: { creativity: 5, strategy: 3, momentum: 4 } },
+  creator: [
+    { id: 'luna_bard', name: 'Luna', warriorClass: 'creator', introQuote: 'This hook will stop the scroll.', artFile: '/warriors/luna_bard.png', stats: { creativity: 5, strategy: 3, momentum: 5 } },
+    { id: 'marco_bard', name: 'Marco', warriorClass: 'creator', introQuote: "Let's build a narrative around this.", artFile: '/warriors/marco_bard.png', stats: { creativity: 4, strategy: 5, momentum: 4 } },
+    { id: 'pixel_bard', name: 'Pixel', warriorClass: 'creator', introQuote: "Nobody's doing this yet — let's try it.", artFile: '/warriors/pixel_bard.png', stats: { creativity: 5, strategy: 3, momentum: 4 } },
   ],
-  artificer: [
-    { id: 'ada_artificer', name: 'Ada', warriorClass: 'artificer', introQuote: 'Clean code, clear architecture.', artFile: '/warriors/ada_artificer.png', stats: { precision: 5, speed: 3, depth: 5 } },
-    { id: 'dex_artificer', name: 'Dex', warriorClass: 'artificer', introQuote: 'Ship first, optimize later.', artFile: '/warriors/dex_artificer.png', stats: { precision: 3, speed: 5, depth: 4 } },
-    { id: 'byte_artificer', name: 'Byte', warriorClass: 'artificer', introQuote: 'I think in systems. Let me see the whole picture.', artFile: '/warriors/byte_artificer.png', stats: { precision: 4, speed: 3, depth: 5 } },
+  strategist: [
+    { id: 'ada_artificer', name: 'Ada', warriorClass: 'strategist', introQuote: 'Clean code, clear architecture.', artFile: '/warriors/ada_artificer.png', stats: { precision: 5, speed: 3, depth: 5 } },
+    { id: 'dex_artificer', name: 'Dex', warriorClass: 'strategist', introQuote: 'Ship first, optimize later.', artFile: '/warriors/dex_artificer.png', stats: { precision: 3, speed: 5, depth: 4 } },
+    { id: 'byte_artificer', name: 'Byte', warriorClass: 'strategist', introQuote: 'I think in systems. Let me see the whole picture.', artFile: '/warriors/byte_artificer.png', stats: { precision: 4, speed: 3, depth: 5 } },
   ],
-  rogue: [
-    { id: 'vega_rogue', name: 'Vega', warriorClass: 'rogue', introQuote: 'The numbers say wait — or strike.', artFile: '/warriors/vega_rogue.png', stats: { analysis: 5, speed: 4, instinct: 4 } },
-    { id: 'rex_rogue', name: 'Rex', warriorClass: 'rogue', introQuote: 'The setup is there. Time to move.', artFile: '/warriors/rex_rogue.png', stats: { analysis: 4, speed: 5, instinct: 5 } },
-    { id: 'onyx_rogue', name: 'Onyx', warriorClass: 'rogue', introQuote: "Everyone's wrong — here's why.", artFile: '/warriors/onyx_rogue.png', stats: { analysis: 5, speed: 3, instinct: 5 } },
+  sentinel: [
+    { id: 'vega_rogue', name: 'Vega', warriorClass: 'sentinel', introQuote: 'The numbers say wait — or strike.', artFile: '/warriors/vega_rogue.png', stats: { analysis: 5, speed: 4, instinct: 4 } },
+    { id: 'rex_rogue', name: 'Rex', warriorClass: 'sentinel', introQuote: 'The setup is there. Time to move.', artFile: '/warriors/rex_rogue.png', stats: { analysis: 4, speed: 5, instinct: 5 } },
+    { id: 'onyx_rogue', name: 'Onyx', warriorClass: 'sentinel', introQuote: "Everyone's wrong — here's why.", artFile: '/warriors/onyx_rogue.png', stats: { analysis: 5, speed: 3, instinct: 5 } },
   ],
 };
 

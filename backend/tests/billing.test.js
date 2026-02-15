@@ -44,7 +44,7 @@ describe('Billing Routes', () => {
               metadata: { user_id: 'user-1', plan: 'pro' },
               customer: 'cus_123',
               subscription: 'sub_123',
-              amount_total: 3900,
+              amount_total: 3000,
             },
           },
         },

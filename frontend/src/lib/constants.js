@@ -1,57 +1,57 @@
 export const CLASS_COLORS = {
   guardian: 'guardian',
   scholar: 'scholar',
-  bard: 'bard',
-  artificer: 'artificer',
-  rogue: 'rogue',
+  creator: 'creator',
+  strategist: 'strategist',
+  sentinel: 'sentinel',
 };
 
 export const CLASS_HEX = {
   guardian: '#4A9EFF',
   scholar: '#B47AFF',
-  bard: '#FFB347',
-  artificer: '#FF7847',
-  rogue: '#47FFB3',
+  creator: '#FFB347',
+  strategist: '#FF7847',
+  sentinel: '#47FFB3',
 };
 
 export const CLASS_ICONS = {
   guardian: '🛡️',
   scholar: '📚',
-  bard: '🎭',
-  artificer: '⚒️',
-  rogue: '🗡️',
+  creator: '✨',
+  strategist: '🧠',
+  sentinel: '🔒',
 };
 
 export const CLASS_STAT_NAMES = {
   guardian: ['protection', 'precision', 'loyalty'],
   scholar: ['wisdom', 'patience', 'clarity'],
-  bard: ['creativity', 'strategy', 'momentum'],
-  artificer: ['precision', 'speed', 'depth'],
-  rogue: ['analysis', 'speed', 'instinct'],
+  creator: ['creativity', 'strategy', 'momentum'],
+  strategist: ['precision', 'speed', 'depth'],
+  sentinel: ['analysis', 'speed', 'instinct'],
 };
 
 export const CLASS_STAT_KEYS = {
   guardian: ['protection', 'precision', 'loyalty'],
   scholar: ['wisdom', 'patience', 'clarity'],
-  bard: ['creativity', 'strategy', 'momentum'],
-  artificer: ['precision', 'speed', 'depth'],
-  rogue: ['analysis', 'speed', 'instinct'],
+  creator: ['creativity', 'strategy', 'momentum'],
+  strategist: ['precision', 'speed', 'depth'],
+  sentinel: ['analysis', 'speed', 'instinct'],
 };
 
 export const CLASS_LABELS = {
   guardian: 'guardian',
   scholar: 'scholar',
-  bard: 'bard',
-  artificer: 'artificer',
-  rogue: 'rogue',
+  creator: 'creator',
+  strategist: 'strategist',
+  sentinel: 'sentinel',
 };
 
 export const CLASS_DESCRIPTIONS = {
   guardian: 'guardian_desc',
   scholar: 'scholar_desc',
-  bard: 'bard_desc',
-  artificer: 'artificer_desc',
-  rogue: 'rogue_desc',
+  creator: 'creator_desc',
+  strategist: 'strategist_desc',
+  sentinel: 'sentinel_desc',
 };
 
 export const TIER_FEATURES = {
@@ -64,7 +64,7 @@ export const TIER_FEATURES = {
   },
   pro: {
     label: 'Pro',
-    price: '$39/mo',
+    price: '$30/mo',
     maxWarriors: 1,
     channels: 2,
     customName: true,
@@ -72,7 +72,7 @@ export const TIER_FEATURES = {
   },
   pro_tribe: {
     label: 'Pro Tribe',
-    price: '$59/mo',
+    price: '$50/mo',
     maxWarriors: 3,
     channels: 2,
     customName: true,
@@ -83,10 +83,10 @@ export const TIER_FEATURES = {
 export const GOAL_OPTIONS = [
   { id: 'productivity', labelKey: 'productivity', icon: '⚔️', class: 'guardian' },
   { id: 'learning', labelKey: 'learning', icon: '📚', class: 'scholar' },
-  { id: 'content', labelKey: 'content', icon: '🎭', class: 'bard' },
-  { id: 'coding', labelKey: 'coding', icon: '🔨', class: 'artificer' },
-  { id: 'trading', labelKey: 'trading', icon: '🗡️', class: 'rogue' },
+  { id: 'content', labelKey: 'content', icon: '✨', class: 'creator' },
+  { id: 'coding', labelKey: 'coding', icon: '🧠', class: 'strategist' },
+  { id: 'trading', labelKey: 'trading', icon: '🔒', class: 'sentinel' },
   { id: 'general', labelKey: 'general', icon: '✨', class: 'guardian' },
 ];
 
-export const CLASSES = ['guardian', 'scholar', 'bard', 'artificer', 'rogue'];
+export const CLASSES = ['guardian', 'scholar', 'creator', 'strategist', 'sentinel'];

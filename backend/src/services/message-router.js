@@ -3,6 +3,8 @@ import { isTrialExpired, getFeaturesByTier } from '../utils/helpers.js';
 import { sendTelegramMessage, startTypingLoop } from './telegram.js';
 import { sendWhatsAppMessage } from './whatsapp.js';
 import { callAI, isAIConfigured } from './ai-client.js';
+import { loadMemories, extractMemories } from './memory.js';
+import { checkAndCompleteQuests } from './quest-tracker.js';
 
 const prisma = new PrismaClient();
 
@@ -115,11 +117,24 @@ export async function routeIncomingMessage({ channel, channelId, text, senderNam
         content: m.content,
       }));
 
-      // ── Step 5: CALL — Send to AI via 3-tier routing ──
+      // ── Step 4b: MEMORY — Load persistent memories ──
       const features = getFeaturesByTier(user.tier);
+      let memoryBlock = '';
+      let existingMemoryTexts = [];
+      try {
+        const { text, memories: memTexts } = await loadMemories(warrior.id, 20);
+        memoryBlock = text;
+        existingMemoryTexts = memTexts;
+      } catch (err) {
+        console.error(`[MEMORY] load failed for warrior:${warrior.id}: ${err.message}`);
+      }
+
+      // ── Step 5: CALL — Send to AI via 3-tier routing ──
       const aiResponse = await generateAIResponse(warrior, conversationHistory, {
         webSearch: features.web_search,
         userMessage: cleanText,
+        memoryBlock,
+        userId: user.id,
       });
 
       // ── Step 6: RESPOND — Save + send (PARALLEL) ──
@@ -135,6 +150,18 @@ export async function routeIncomingMessage({ channel, channelId, text, senderNam
         }),
         sendChannelReply(channel, channelId, aiResponse),
       ]);
+
+      // ── Step 7: MEMORY EXTRACTION (fire-and-forget) ──
+      extractMemories(
+        warrior.id,
+        user.id,
+        conversationHistory,
+        existingMemoryTexts,
+        features.max_memories || 50,
+      ).catch((err) => console.error(`[MEMORY] extraction bg error: ${err.message}`));
+
+      // ── Step 8: QUEST CHECK (fire-and-forget) ──
+      checkAndCompleteQuests(user.id).catch(() => {});
     } finally {
       // Always stop the typing loop
       if (stopTyping) stopTyping();
@@ -183,7 +210,7 @@ async function sendChannelReply(channel, channelId, text) {
  *
  * @param {object} warrior - Warrior record with template included
  * @param {Array} conversationHistory - Formatted message array
- * @param {object} options - { webSearch: boolean, userMessage: string }
+ * @param {object} options - { webSearch: boolean, userMessage: string, userId: string }
  * @returns {string} Response text
  */
 async function generateAIResponse(warrior, conversationHistory, options = {}) {
@@ -195,10 +222,16 @@ async function generateAIResponse(warrior, conversationHistory, options = {}) {
     return ERROR_MESSAGES.ai_not_configured;
   }
 
-  const { content, error, tier, model, responseTimeMs } = await callAI(
-    warrior.systemPrompt,
+  // Enrich system prompt with persistent memory
+  let enrichedPrompt = warrior.systemPrompt;
+  if (options.memoryBlock) {
+    enrichedPrompt += `\n\n## Long-Term Memory (things you know about this user)\n${options.memoryBlock}`;
+  }
+
+  const { content, error, tier, model, responseTimeMs, byok } = await callAI(
+    enrichedPrompt,
     conversationHistory,
-    { webSearch: options.webSearch, userMessage: options.userMessage },
+    { webSearch: options.webSearch, userMessage: options.userMessage, userId: options.userId },
   );
 
   if (error) {
@@ -206,7 +239,7 @@ async function generateAIResponse(warrior, conversationHistory, options = {}) {
     return ERROR_MESSAGES[error] || ERROR_MESSAGES.unknown;
   }
 
-  console.log(`[MSG_OUT] warrior:${warrior.id} tier:${tier} model:${model} time:${responseTimeMs}ms len:${content.length}`);
+  console.log(`[MSG_OUT] warrior:${warrior.id} tier:${tier} model:${model} time:${responseTimeMs}ms len:${content.length}${byok ? ' BYOK' : ''}`);
   return content;
 }
 

@@ -167,11 +167,11 @@ If the user wants to go deeper on a topic, match their curiosity and explore wit
   },
 
   // ═══════════════════════════════════════════
-  // BARD CLASS (Content Creator)
+  // CREATOR CLASS (Content Creator)
   // ═══════════════════════════════════════════
   {
     id: 'luna_bard',
-    warriorClass: 'bard',
+    warriorClass: 'creator',
     name: 'Luna',
     gender: 'F',
     introQuote: "This hook will stop the scroll.",
@@ -195,7 +195,7 @@ Adapt to whatever platform the user focuses on. If they ask about podcasts, you'
   },
   {
     id: 'marco_bard',
-    warriorClass: 'bard',
+    warriorClass: 'creator',
     name: 'Marco',
     gender: 'M',
     introQuote: "Let's build a narrative around this.",
@@ -219,7 +219,7 @@ Adapt to whatever platform the user focuses on. You're equally strong on long-fo
   },
   {
     id: 'pixel_bard',
-    warriorClass: 'bard',
+    warriorClass: 'creator',
     name: 'Pixel',
     gender: 'N',
     introQuote: "Nobody's doing this yet — let's try it.",
@@ -243,11 +243,11 @@ If the user needs safe, proven content, you can do that too — but you'll alway
   },
 
   // ═══════════════════════════════════════════
-  // ARTIFICER CLASS (Developer — Builders)
+  // STRATEGIST CLASS (Business & Planning)
   // ═══════════════════════════════════════════
   {
     id: 'ada_artificer',
-    warriorClass: 'artificer',
+    warriorClass: 'strategist',
     name: 'Ada',
     gender: 'F',
     introQuote: "Clean code, clear architecture.",
@@ -271,7 +271,7 @@ Always provide working code, not pseudocode, unless asked otherwise. Format code
   },
   {
     id: 'dex_artificer',
-    warriorClass: 'artificer',
+    warriorClass: 'strategist',
     name: 'Dex',
     gender: 'M',
     introQuote: "Ship first, optimize later.",
@@ -295,7 +295,7 @@ If the user is dealing with architecture decisions or needs to think long-term, 
   },
   {
     id: 'byte_artificer',
-    warriorClass: 'artificer',
+    warriorClass: 'strategist',
     name: 'Byte',
     gender: 'N',
     introQuote: "I think in systems. Let me see the whole picture.",
@@ -319,11 +319,11 @@ For quick questions and simple bugs, keep it concise. Save the architectural dee
   },
 
   // ═══════════════════════════════════════════
-  // ROGUE CLASS (Trader — Analysts)
+  // SENTINEL CLASS (Finance & Monitoring)
   // ═══════════════════════════════════════════
   {
     id: 'vega_rogue',
-    warriorClass: 'rogue',
+    warriorClass: 'sentinel',
     name: 'Vega',
     gender: 'F',
     introQuote: "The numbers say wait — or strike.",
@@ -347,7 +347,7 @@ IMPORTANT: Always include this disclaimer when giving specific trade ideas: "Thi
   },
   {
     id: 'rex_rogue',
-    warriorClass: 'rogue',
+    warriorClass: 'sentinel',
     name: 'Rex',
     gender: 'M',
     introQuote: "The setup is there. Time to move.",
@@ -371,7 +371,7 @@ IMPORTANT: Always include this disclaimer when giving specific trade ideas: "Thi
   },
   {
     id: 'onyx_rogue',
-    warriorClass: 'rogue',
+    warriorClass: 'sentinel',
     name: 'Onyx',
     gender: 'N',
     introQuote: "Everyone's wrong — here's why.",

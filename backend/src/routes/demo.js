@@ -59,7 +59,7 @@ async function demoRoutes(app) {
         return reply.send({
           response: "Luna here! My creative spark is charging up — I'll be fully operational soon. Sign up at clawwarriors.com to be first in line! 🎭",
           warrior: 'Luna',
-          class: 'bard',
+          class: 'creator',
         });
       }
 
@@ -88,9 +88,9 @@ async function demoRoutes(app) {
       if (error) {
         console.error(`[ERROR] demo AI failed: ${error} (tier:${tier} model:${model})`);
         return reply.send({
-          response: "Even the best Bards need a breather! Try again in a sec. 🎭",
+          response: "Even the best Creators need a breather! Try again in a sec. 🎭",
           warrior: 'Luna',
-          class: 'bard',
+          class: 'creator',
         });
       }
 
@@ -99,7 +99,7 @@ async function demoRoutes(app) {
       return reply.send({
         response: content,
         warrior: 'Luna',
-        class: 'bard',
+        class: 'creator',
         tier,
         model,
         responseTimeMs,

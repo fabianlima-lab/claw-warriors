@@ -64,7 +64,7 @@ res = await fetch(BASE + '/api/billing/webhook', {
         metadata: { user_id: userId, plan: 'pro' },
         customer: 'cus_test_123',
         subscription: 'sub_test_123',
-        amount_total: 3900,
+        amount_total: 3000,
       },
     },
   }),
@@ -94,7 +94,7 @@ res = await fetch(BASE + '/api/billing/webhook', {
         metadata: { user_id: userId, plan: 'pro_tribe' },
         customer: 'cus_test_123',
         subscription: 'sub_test_456',
-        amount_total: 5900,
+        amount_total: 5000,
       },
     },
   }),
@@ -153,13 +153,13 @@ await fetch(BASE + '/api/billing/webhook', {
         metadata: { user_id: data13.user_id },
         customer: 'cus_test_amt',
         subscription: 'sub_test_amt',
-        amount_total: 5900,
+        amount_total: 5000,
       },
     },
   }),
 });
 const user13 = await prisma.user.findUnique({ where: { id: data13.user_id } });
-check('Amount-based tier detection ($59 → pro_tribe)', user13.tier === 'pro_tribe',
+check('Amount-based tier detection ($50 → pro_tribe)', user13.tier === 'pro_tribe',
   `tier=${user13.tier}`);
 
 console.log(`\n=== Results: ${pass}/${pass + fail} passed ===`);

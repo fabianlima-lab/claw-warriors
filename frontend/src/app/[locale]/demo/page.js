@@ -36,7 +36,7 @@ export default function DemoPage() {
         <div className="h-[500px]">
           <ChatWidget
             warriorName="Luna"
-            warriorClass="bard"
+            warriorClass="creator"
             portraitSrc="/warriors/luna_bard.png"
             onSend={handleSend}
             messages={[
