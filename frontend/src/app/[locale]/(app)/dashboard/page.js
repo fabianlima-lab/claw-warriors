@@ -87,7 +87,7 @@ export default function DashboardPage() {
       )}
 
       {/* ── The Hearth: Warrior + Quest + Chat ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
         {/* Left column: Warrior card + Features + Quest */}
         <div className="lg:col-span-2 space-y-4">
           {warriors.map((w) => {
@@ -213,17 +213,21 @@ export default function DashboardPage() {
             </Card>
           )}
 
-          {/* ── Feature Buttons (5 actions) ── */}
+          {/* ── Feature Buttons (6 actions) ── */}
           <div className="grid grid-cols-3 gap-2">
             {FEATURE_BUTTONS.map((btn) => (
-              <button
+              <Link
                 key={btn.key}
-                onClick={() => router.push(btn.href)}
-                className="flex flex-col items-center gap-1.5 px-2 py-3 text-txt-body bg-card border border-border rounded-[var(--radius-btn)] hover:border-accent hover:text-accent transition-all cursor-pointer group"
+                href={btn.href}
+                className="relative flex flex-col items-center gap-1.5 px-2 py-3 text-txt-body bg-card border border-border rounded-[var(--radius-btn)] hover:border-accent hover:text-accent transition-all cursor-pointer group overflow-hidden"
               >
                 <span className="text-lg group-hover:scale-110 transition-transform">{btn.icon}</span>
                 <span className="text-[11px] font-medium">{t(btn.key)}</span>
-              </button>
+                {/* Hover description overlay */}
+                <span className="absolute inset-0 flex items-center justify-center px-2 text-center text-[10px] leading-tight text-txt bg-card/95 border border-accent rounded-[var(--radius-btn)] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                  {tGlossary(btn.glossary)}
+                </span>
+              </Link>
             ))}
           </div>
 
@@ -249,7 +253,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Right column: Chat panel */}
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-3 lg:sticky lg:top-20 lg:self-start">
           {warriors.length > 0 && (
             <ChatPanel warrior={{
               name: warriors[0].customName || warriors[0].custom_name || warriors[0].template?.name || warriors[0].templateId || warriors[0].template_id,
