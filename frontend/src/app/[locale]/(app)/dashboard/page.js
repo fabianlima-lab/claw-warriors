@@ -87,7 +87,7 @@ export default function DashboardPage() {
       )}
 
       {/* ── The Hearth: Warrior + Quest + Chat ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left column: Warrior card + Features + Quest */}
         <div className="lg:col-span-2 space-y-4">
           {warriors.map((w) => {
@@ -253,7 +253,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Right column: Chat panel */}
-        <div className="lg:col-span-3 lg:sticky lg:top-20 lg:self-start">
+        <div className="lg:col-span-3">
           {warriors.length > 0 && (
             <ChatPanel warrior={{
               name: warriors[0].customName || warriors[0].custom_name || warriors[0].template?.name || warriors[0].templateId || warriors[0].template_id,

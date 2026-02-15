@@ -132,8 +132,7 @@ export default function ChatPanel({ warrior }) {
   };
 
   return (
-    <div className="flex flex-col bg-card border border-border rounded-[var(--radius-card)] overflow-hidden"
-      style={{ height: 'min(520px, 60vh)' }}>
+    <div className="flex flex-col bg-card border border-border rounded-[var(--radius-card)] overflow-hidden h-[min(480px,60vh)] lg:h-full lg:max-h-[calc(100vh-8rem)]">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-border shrink-0">
         <Image
