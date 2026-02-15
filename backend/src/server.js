@@ -35,7 +35,8 @@ async function build() {
     try {
       // Store raw body for Stripe webhook verification
       req.rawBody = body;
-      const json = JSON.parse(body.toString());
+      const str = body.toString();
+      const json = str.length > 0 ? JSON.parse(str) : {};
       done(null, json);
     } catch (err) {
       err.statusCode = 400;
