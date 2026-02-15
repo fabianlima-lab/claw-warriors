@@ -45,7 +45,7 @@ export default function DeployPage() {
       setCurrentStep((prev) => {
         if (prev >= DEPLOY_STEPS.length - 1) {
           clearInterval(timer);
-          setTimeout(() => setPhase('avatar'), 600);
+          setTimeout(() => setPhase('done'), 600);
           return prev;
         }
         return prev + 1;
