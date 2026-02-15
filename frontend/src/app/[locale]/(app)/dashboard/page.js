@@ -219,14 +219,10 @@ export default function DashboardPage() {
               <Link
                 key={btn.key}
                 href={btn.href}
-                className="relative flex flex-col items-center gap-1.5 px-2 py-3 text-txt-body bg-card border border-border rounded-[var(--radius-btn)] hover:border-accent hover:text-accent transition-all cursor-pointer group overflow-hidden"
+                className="flex flex-col items-center gap-1.5 px-2 py-3 text-txt-body bg-card border border-border rounded-[var(--radius-btn)] hover:border-accent hover:text-accent transition-all cursor-pointer group"
               >
                 <span className="text-lg group-hover:scale-110 transition-transform">{btn.icon}</span>
                 <span className="text-[11px] font-medium">{t(btn.key)}</span>
-                {/* Hover description overlay */}
-                <span className="absolute inset-0 flex items-center justify-center px-2 text-center text-[10px] leading-tight text-txt bg-card/95 border border-accent rounded-[var(--radius-btn)] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                  {tGlossary(btn.glossary)}
-                </span>
               </Link>
             ))}
           </div>
