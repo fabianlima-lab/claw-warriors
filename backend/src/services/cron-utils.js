@@ -1,4 +1,5 @@
-import { parseExpression } from 'cron-parser';
+import pkg from 'cron-parser';
+const { parseExpression } = pkg;
 
 /**
  * Calculate the next run time for a cron expression in a specific timezone.
