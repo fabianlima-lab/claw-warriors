@@ -211,11 +211,11 @@
     "bard": "Bardo",
     "artificer": "Artífice",
     "rogue": "Infiltrador",
-    "guardian_desc": "Protetores & Assistentes",
-    "scholar_desc": "Estudiosos & Tutores",
-    "bard_desc": "Criadores de Conteúdo",
-    "artificer_desc": "Desenvolvedores & Construtores",
-    "rogue_desc": "Traders & Analistas"
+    "guardian_desc": "Seu escudo pessoal — gerencia tarefas, agenda e lembretes",
+    "scholar_desc": "Seu mentor sábio — ensina, pesquisa e explica qualquer tema",
+    "bard_desc": "Sua voz criativa — escreve posts, histórias e conteúdo social",
+    "artificer_desc": "Seu mestre construtor — programa, depura e cria ferramentas digitais",
+    "rogue_desc": "Seu olho afiado — rastreia mercados, analisa dados e encontra tendências"
   },
   "Stats": {
     "protection": "Proteção",

@@ -9,7 +9,7 @@ import Button from '@/components/ui/Button';
 import SectionLabel from '@/components/ui/SectionLabel';
 import StatBar from '@/components/ui/StatBar';
 import ClassTabs from '@/components/ClassTabs';
-import { CLASS_LABELS, CLASS_STAT_NAMES, CLASS_STAT_KEYS, CLASS_HEX, GOAL_OPTIONS } from '@/lib/constants';
+import { CLASS_LABELS, CLASS_DESCRIPTIONS, CLASS_STAT_NAMES, CLASS_STAT_KEYS, CLASS_HEX, GOAL_OPTIONS } from '@/lib/constants';
 import { apiFetch, apiPost } from '@/lib/api';
 
 export default function WarriorsPage() {
@@ -169,6 +169,9 @@ export default function WarriorsPage() {
                 >
                   {tClasses(CLASS_LABELS[cls])}
                 </span>
+                <p className="text-xs text-txt-muted leading-snug">
+                  {tClasses(CLASS_DESCRIPTIONS[cls])}
+                </p>
                 {w.introQuote && (
                   <p className="text-sm text-txt-muted italic">
                     &ldquo;{w.introQuote}&rdquo;
@@ -211,6 +214,9 @@ export default function WarriorsPage() {
               >
                 {tClasses(CLASS_LABELS[selectedWarrior.warriorClass || selectedWarrior.warrior_class])}
               </span>
+              <p className="text-xs text-txt-muted mt-1">
+                {tClasses(CLASS_DESCRIPTIONS[selectedWarrior.warriorClass || selectedWarrior.warrior_class])}
+              </p>
               {selectedWarrior.firstMessage && (
                 <p className="text-sm text-txt-muted mt-3 italic">
                   &ldquo;{selectedWarrior.firstMessage}&rdquo;

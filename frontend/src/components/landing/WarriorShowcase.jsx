@@ -5,7 +5,7 @@ import Image from 'next/image';
 import ClassTabs from '@/components/ClassTabs';
 import StatBar from '@/components/ui/StatBar';
 import Card from '@/components/ui/Card';
-import { CLASS_LABELS, CLASS_STAT_NAMES, CLASS_STAT_KEYS, CLASS_HEX } from '@/lib/constants';
+import { CLASS_LABELS, CLASS_DESCRIPTIONS, CLASS_STAT_NAMES, CLASS_STAT_KEYS, CLASS_HEX } from '@/lib/constants';
 import { useTranslations } from 'next-intl';
 
 const FALLBACK_WARRIORS = {
@@ -95,6 +95,9 @@ export default function WarriorShowcase() {
                 <span className="text-xs uppercase tracking-wider font-medium" style={{ color }}>
                   {tClasses(CLASS_LABELS[cls])}
                 </span>
+                <p className="text-xs text-txt-muted leading-snug">
+                  {tClasses(CLASS_DESCRIPTIONS[cls])}
+                </p>
                 {w.introQuote && (
                   <p className="text-sm text-txt-muted italic">&ldquo;{w.introQuote}&rdquo;</p>
                 )}

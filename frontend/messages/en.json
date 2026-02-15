@@ -211,11 +211,11 @@
     "bard": "Bard",
     "artificer": "Artificer",
     "rogue": "Rogue",
-    "guardian_desc": "Protectors & Assistants",
-    "scholar_desc": "Learners & Tutors",
-    "bard_desc": "Content Creators",
-    "artificer_desc": "Developers & Builders",
-    "rogue_desc": "Traders & Analysts"
+    "guardian_desc": "Your personal shield — manages tasks, schedules & reminders",
+    "scholar_desc": "Your wise mentor — teaches, researches & explains any topic",
+    "bard_desc": "Your creative voice — writes posts, stories & social content",
+    "artificer_desc": "Your master builder — codes, debugs & builds digital tools",
+    "rogue_desc": "Your sharp eye — tracks markets, analyzes data & finds trends"
   },
   "Stats": {
     "protection": "Protection",
