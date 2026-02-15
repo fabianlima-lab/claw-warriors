@@ -377,7 +377,8 @@
     "dangerZone": "Zona de Perigo",
     "dangerDesc": "Excluir permanentemente sua conta e todos os dados associados. Esta ação não pode ser desfeita.",
     "deleteAccount": "Excluir Conta",
-    "deleteConfirm": "Tem certeza que deseja excluir sua conta? Isso não pode ser desfeito."
+    "deleteConfirm": "Tem certeza que deseja excluir sua conta? Isso não pode ser desfeito.",
+    "deleteFailed": "Falha ao excluir conta. Tente novamente."
   },
   "Demo": {
     "label": "Demo ao Vivo",

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
@@ -18,6 +19,8 @@ export default function SettingsPage() {
   const [passwordErr, setPasswordErr] = useState('');
   const [loading, setLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     apiFetch('/dashboard/stats')
@@ -158,10 +161,18 @@ export default function SettingsPage() {
         </p>
         <Button
           variant="danger"
-          onClick={() => {
+          loading={deleteLoading}
+          onClick={async () => {
             if (window.confirm(t('deleteConfirm'))) {
-              // TODO: Implement account deletion endpoint
-              console.log('Account deletion requested');
+              setDeleteLoading(true);
+              try {
+                await apiFetch('/users/me', { method: 'DELETE' });
+                localStorage.removeItem('cw_token');
+                router.push('/login');
+              } catch {
+                alert(t('deleteFailed'));
+                setDeleteLoading(false);
+              }
             }
           }}
         >

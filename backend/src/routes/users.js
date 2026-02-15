@@ -38,6 +38,31 @@ async function userRoutes(app) {
       return reply.code(500).send({ error: 'Something went wrong. Try again in a moment.' });
     }
   });
+
+  // DELETE /api/users/me — permanently delete account and all associated data
+  app.delete('/me', {
+    preHandler: [app.authenticate],
+    config: {
+      rateLimit: { max: 3, timeWindow: '1 minute' },
+    },
+  }, async (request, reply) => {
+    const userId = request.user.userId;
+
+    try {
+      // Delete records that don't cascade from User
+      await prisma.vaultEntry.deleteMany({ where: { userId } });
+      await prisma.questProgress.deleteMany({ where: { userId } });
+
+      // Delete user — cascades to warriors (→ memories, pulses, rhythms) and messages
+      await prisma.user.delete({ where: { id: userId } });
+
+      console.log(`[USER] account deleted: ${userId}`);
+      return reply.send({ success: true });
+    } catch (error) {
+      console.error('[ERROR] account deletion failed:', error.message);
+      return reply.code(500).send({ error: 'Failed to delete account. Please try again.' });
+    }
+  });
 }
 
 export default userRoutes;

@@ -377,7 +377,8 @@
     "dangerZone": "Danger Zone",
     "dangerDesc": "Permanently delete your account and all associated data. This action cannot be undone.",
     "deleteAccount": "Delete Account",
-    "deleteConfirm": "Are you sure you want to delete your account? This cannot be undone."
+    "deleteConfirm": "Are you sure you want to delete your account? This cannot be undone.",
+    "deleteFailed": "Failed to delete account. Please try again."
   },
   "Demo": {
     "label": "Live Demo",
